@@ -13,34 +13,40 @@
           far away...
         </p>
         <div
-          class="btn-container absolute bottom-0 flex h-screen w-full translate-y-full items-center justify-center gap-10 transition-all [&>div>div]:duration-200"
+          class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all [&>div>div]:flex [&>div>div]:items-center [&>div>div]:justify-center [&>div>div]:text-5xl [&>div>div]:font-semibold [&>div>div]:text-white [&>div>div]:duration-200 [&>div]:translate-y-[1000px]"
         >
           <div
-            class="group relative aspect-square w-[250px] hover:cursor-pointer"
+            class="btn-1 group relative aspect-square w-[250px] hover:cursor-pointer"
           >
             <div
-              class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
-            ></div>
+              class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black text-white transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
+            >
+              Projets
+            </div>
             <div
               class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
             ></div>
           </div>
           <div
-            class="group relative aspect-square w-[250px] hover:cursor-pointer"
+            class="btn-2 group relative aspect-square w-[250px] hover:cursor-pointer"
           >
             <div
               class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
-            ></div>
+            >
+              CV
+            </div>
             <div
               class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
             ></div>
           </div>
           <div
-            class="group relative aspect-square w-[250px] hover:cursor-pointer"
+            class="btn-3 group relative aspect-square w-[250px] hover:cursor-pointer"
           >
             <div
               class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
-            ></div>
+            >
+              Contact
+            </div>
             <div
               class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
             ></div>
@@ -91,11 +97,29 @@ export default {
       transformPerspective: 3000,
     });
 
-    gsap.to(".btn-container", {
+    gsap.to(".btn-1", {
       scrollTrigger: {
         trigger: ".scroll-trigger-intro",
         start: "30% top",
         end: "60%",
+        scrub: true,
+      },
+      translateY: 0,
+    });
+    gsap.to(".btn-2", {
+      scrollTrigger: {
+        trigger: ".scroll-trigger-intro",
+        start: "40% top",
+        end: "70%",
+        scrub: true,
+      },
+      translateY: 0,
+    });
+    gsap.to(".btn-3", {
+      scrollTrigger: {
+        trigger: ".scroll-trigger-intro",
+        start: "50% top",
+        end: "80%",
         scrub: true,
       },
       translateY: 0,
