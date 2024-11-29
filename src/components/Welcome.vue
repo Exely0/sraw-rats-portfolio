@@ -15,42 +15,9 @@
         <div
           class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all [&>div>div]:flex [&>div>div]:items-center [&>div>div]:justify-center [&>div>div]:text-5xl [&>div>div]:font-semibold [&>div>div]:text-white [&>div>div]:duration-200 [&>div]:translate-y-[1000px]"
         >
-          <div
-            class="btn-1 group relative aspect-square w-[250px] hover:cursor-pointer"
-          >
-            <div
-              class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black text-white transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
-            >
-              Projets
-            </div>
-            <div
-              class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
-            ></div>
-          </div>
-          <div
-            class="btn-2 group relative aspect-square w-[250px] hover:cursor-pointer"
-          >
-            <div
-              class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
-            >
-              CV
-            </div>
-            <div
-              class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
-            ></div>
-          </div>
-          <div
-            class="btn-3 group relative aspect-square w-[250px] hover:cursor-pointer"
-          >
-            <div
-              class="bg-black-500 absolute z-10 aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer border-2 border-yellow-500 bg-black transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:bg-yellow-500"
-            >
-              Contact
-            </div>
-            <div
-              class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
-            ></div>
-          </div>
+          <Button text="Projets" />
+          <Button text="CV" />
+          <Button text="Contact" />
         </div>
       </div>
     </div>
@@ -60,9 +27,13 @@
 <script>
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Button from "./Button.vue";
 
 export default {
-  name: "StarWarsIntro",
+  name: "Welcome.vue",
+  components: {
+    Button,
+  },
   mounted() {
     gsap.registerPlugin(ScrollTrigger);
 
