@@ -13,11 +13,17 @@
           far away...
         </p>
         <div
-          class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all [&>div>div]:flex [&>div>div]:items-center [&>div>div]:justify-center [&>div>div]:text-5xl [&>div>div]:font-semibold [&>div>div]:text-white [&>div>div]:duration-200 [&>div]:translate-y-[1000px]"
+          class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all"
         >
-          <Button text="Projets" />
-          <Button text="CV" />
-          <Button text="Contact" />
+          <div class="btn-1 translate-y-[1000px]">
+            <Button text="Projets" route="/projects" />
+          </div>
+          <div class="btn-2 translate-y-[1000px]">
+            <Button text="CV" />
+          </div>
+          <div class="btn-3 translate-y-[1000px]">
+            <Button text="Contact" />
+          </div>
         </div>
       </div>
     </div>
