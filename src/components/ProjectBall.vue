@@ -1,91 +1,103 @@
 <template>
   <div
-    class="project-ball absolute flex aspect-square items-center justify-center rounded-full"
+    class="project-ball absolute z-20 flex aspect-square items-center justify-center rounded-full"
     :style="{
       backgroundColor: color,
       width: size + 'px',
       transform: `translate(${position.x}px, ${position.y}px)`,
     }"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
     ref="ball"
   >
     {{ name }}
   </div>
 </template>
 
-<script>
-export default {
-  name: "ProjectBall",
-  props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    color: {
-      type: String,
-      required: true,
-    },
-    size: {
-      type: Number,
-      required: true,
-    },
-    initialPosition: {
-      type: Object,
-      required: true,
-    },
-    initialVelocity: {
-      type: Object,
-      required: true,
-    },
-    containerBounds: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      position: { ...this.initialPosition },
-      velocity: { ...this.initialVelocity },
-      boundingRect: null,
-    };
-  },
-  methods: {
-    moveBall() {
-      const ball = this.$refs.ball;
+<script setup lang="ts">
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 
-      this.position.x += this.velocity.x;
-      this.position.y += this.velocity.y;
+// Props definition
+interface Position {
+  x: number;
+  y: number;
+}
 
-      const { width, height } = this.containerBounds;
+interface Bounds {
+  width: number;
+  height: number;
+}
 
-      if (this.position.x <= 0 || this.position.x + this.size >= width) {
-        this.velocity.x *= -1;
-      }
-      if (this.position.y <= 0 || this.position.y + this.size >= height) {
-        this.velocity.y *= -1;
-      }
+const props = defineProps<{
+  id: number;
+  name: string;
+  color: string;
+  size: number;
+  initialPosition: Position;
+  initialVelocity: Position;
+  containerBounds: Bounds;
+}>();
 
-      if (ball) {
-        this.boundingRect = ball.getBoundingClientRect();
-      }
+const emit = defineEmits<{
+  (
+    event: "ball-data",
+    data: { velocity: Position; boundingRect: DOMRect },
+  ): void;
+}>();
 
-      this.$emit("ball-data", {
-        velocity: this.velocity,
-        boundingRect: this.boundingRect,
-      });
-    },
-  },
-  mounted() {
-    console.log("coucou");
-    this.moveInterval = setInterval(this.moveBall, 16);
-  },
-  beforeUnmount() {
-    clearInterval(this.moveInterval);
-  },
+const position = reactive({ ...props.initialPosition });
+const velocity = reactive({ ...props.initialVelocity });
+
+const ball = ref<HTMLDivElement | null>(null);
+
+let moveInterval: number | null = null;
+
+const moveBall = () => {
+  position.x += velocity.x;
+  position.y += velocity.y;
+
+  const { width, height } = props.containerBounds;
+
+  if (position.x <= 0 || position.x + props.size >= width) {
+    velocity.x *= -1;
+  }
+  if (position.y <= 0 || position.y + props.size >= height) {
+    velocity.y *= -1;
+  }
+
+  if (ball.value) {
+    const boundingRect = ball.value.getBoundingClientRect();
+    emit("ball-data", {
+      velocity: { ...velocity },
+      boundingRect,
+    });
+  }
 };
+
+const handleMouseEnter = () => {
+  console.log("Hover detected");
+  if (moveInterval !== null) {
+    clearInterval(moveInterval);
+    moveInterval = null;
+  }
+};
+
+const handleMouseLeave = () => {
+  console.log("Mouse left");
+  if (moveInterval === null) {
+    moveInterval = window.setInterval(moveBall, 16);
+  }
+};
+
+onMounted(() => {
+  moveInterval = setInterval(moveBall, 16);
+});
+
+onBeforeUnmount(() => {
+  if (moveInterval !== null) {
+    clearInterval(moveInterval);
+  }
+});
 </script>
 
 <style scoped></style>
