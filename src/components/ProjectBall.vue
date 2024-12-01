@@ -76,11 +76,17 @@ const getBoundingClientRect = () => {
   return ball.value?.getBoundingClientRect() ?? null;
 };
 
-const handleCollision = () => {
-  velocity.x *= -1;
-  velocity.y *= -1;
-  position.x += velocity.x;
-  position.y += velocity.y;
+const getVelocity = () => {
+  return velocity;
+};
+
+const getPosition = () => {
+  return position;
+};
+
+const setVelocity = (newVelocity: Position) => {
+  velocity.x = newVelocity.x;
+  velocity.y = newVelocity.y;
 };
 
 onMounted(() => {
@@ -95,7 +101,9 @@ onBeforeUnmount(() => {
 
 defineExpose({
   getBoundingClientRect,
-  handleCollision,
+  getVelocity,
+  getPosition,
+  setVelocity,
 });
 </script>
 

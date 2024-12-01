@@ -40,14 +40,18 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import ProjectBall from "../components/ProjectBall.vue";
 
+interface Position {
+  x: number;
+  y: number;
+}
+
 interface Project {
   id: number;
-  ref: String;
   name: string;
   color: string;
   size: number;
-  initialPosition: { x: number; y: number };
-  initialVelocity: { x: number; y: number };
+  initialPosition: Position;
+  initialVelocity: Position;
 }
 
 const projects = <Project[]>[
@@ -83,7 +87,6 @@ const containerBounds = reactive<{ width: number; height: number }>({
 });
 
 const container = ref<HTMLDivElement | null>(null);
-
 const ball0 = ref(null);
 const ball1 = ref(null);
 const ball2 = ref(null);
@@ -96,51 +99,63 @@ const updateContainerBounds = () => {
   }
 };
 
+const checkCircleCollision = (ballA: any, ballB: any) => {
+  const rectA = ballA.getBoundingClientRect();
+  const centerA = {
+    x: rectA.left + rectA.width / 2,
+    y: rectA.top + rectA.height / 2,
+  };
+  const radiusA = rectA.width / 2;
+
+  const rectB = ballB.getBoundingClientRect();
+  const centerB = {
+    x: rectB.left + rectB.width / 2,
+    y: rectB.top + rectB.height / 2,
+  };
+  const radiusB = rectB.width / 2;
+
+  const dx = centerB.x - centerA.x;
+  const dy = centerB.y - centerA.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  return distance <= radiusA + radiusB;
+};
+
+const handleBallCollision = (ballA: any, ballB: any) => {
+  const velocityA = ballA.getVelocity();
+  const velocityB = ballB.getVelocity();
+
+  const newVelocityA = {
+    x: -velocityA.x,
+    y: -velocityA.y,
+  };
+  const newVelocityB = {
+    x: -velocityB.x,
+    y: -velocityB.y,
+  };
+
+  ballA.setVelocity(newVelocityA);
+  ballB.setVelocity(newVelocityB);
+};
+
 const checkCollisions = () => {
   const balls = [ball0.value, ball1.value, ball2.value];
+
   for (let i = 0; i < balls.length; i++) {
     const ballA = balls[i];
     if (!ballA) continue;
-
-    const rectA = ballA.getBoundingClientRect();
-    const centerA = {
-      x: rectA.left + rectA.width / 2,
-      y: rectA.top + rectA.height / 2,
-    };
-    const radiusA = rectA.width / 2;
 
     for (let j = i + 1; j < balls.length; j++) {
       const ballB = balls[j];
       if (!ballB) continue;
 
-      const rectB = ballB.getBoundingClientRect();
-      const centerB = {
-        x: rectB.left + rectB.width / 2,
-        y: rectB.top + rectB.height / 2,
-      };
-      const radiusB = rectB.width / 2;
-
-      const dx = centerB.x - centerA.x;
-      const dy = centerB.y - centerA.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance <= radiusA + radiusB) {
+      if (checkCircleCollision(ballA, ballB)) {
         console.log(`Collision detected between ball ${i} and ball ${j}`);
-        ballA.handleCollision();
-        ballB.handleCollision();
+        handleBallCollision(ballA, ballB);
       }
     }
   }
 };
-
-function intersect(a: DOMRect, b: DOMRect): boolean {
-  return (
-    a.left <= b.right &&
-    b.left <= a.right &&
-    a.top <= b.bottom &&
-    b.top <= a.bottom
-  );
-}
 
 const collisionsInterval = ref(null);
 onMounted(() => {
