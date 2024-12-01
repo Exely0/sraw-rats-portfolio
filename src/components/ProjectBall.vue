@@ -1,6 +1,6 @@
 <template>
   <div
-    class="project-ball absolute z-20 flex aspect-square items-center justify-center rounded-full"
+    class="project-ball absolute z-20 flex aspect-square items-center justify-center rounded-full hover:cursor-pointer"
     :style="{
       backgroundColor: color,
       width: size + 'px',

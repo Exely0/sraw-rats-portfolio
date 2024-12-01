@@ -33,6 +33,36 @@
       :initialVelocity="projects[2].initialVelocity"
       :containerBounds="containerBounds"
     />
+    <ProjectBall
+      :id="projects[3].id"
+      ref="ball3"
+      :name="projects[3].name"
+      :color="projects[3].color"
+      :size="projects[3].size"
+      :initialPosition="projects[3].initialPosition"
+      :initialVelocity="projects[3].initialVelocity"
+      :containerBounds="containerBounds"
+    />
+    <ProjectBall
+      :id="projects[4].id"
+      ref="ball4"
+      :name="projects[4].name"
+      :color="projects[4].color"
+      :size="projects[4].size"
+      :initialPosition="projects[4].initialPosition"
+      :initialVelocity="projects[4].initialVelocity"
+      :containerBounds="containerBounds"
+    />
+    <ProjectBall
+      :id="projects[5].id"
+      ref="ball5"
+      :name="projects[5].name"
+      :color="projects[5].color"
+      :size="projects[5].size"
+      :initialPosition="projects[5].initialPosition"
+      :initialVelocity="projects[5].initialVelocity"
+      :containerBounds="containerBounds"
+    />
   </div>
 </template>
 
@@ -69,7 +99,7 @@ const projects = <Project[]>[
     color: "blue",
     size: 250,
     initialPosition: { x: 300, y: 200 },
-    initialVelocity: { x: -2, y: 3 },
+    initialVelocity: { x: -1.5, y: 1.5 },
   },
   {
     id: 2,
@@ -77,7 +107,31 @@ const projects = <Project[]>[
     color: "green",
     size: 350,
     initialPosition: { x: 500, y: 400 },
-    initialVelocity: { x: 1, y: -2 },
+    initialVelocity: { x: 1, y: -1 },
+  },
+  {
+    id: 3,
+    name: "Project 4",
+    color: "yellow",
+    size: 250,
+    initialPosition: { x: 900, y: 200 },
+    initialVelocity: { x: 1.5, y: -1.5 },
+  },
+  {
+    id: 4,
+    name: "Project 5",
+    color: "orange",
+    size: 350,
+    initialPosition: { x: 1000, y: 500 },
+    initialVelocity: { x: 1, y: 1 },
+  },
+  {
+    id: 5,
+    name: "Project 6",
+    color: "violet",
+    size: 150,
+    initialPosition: { x: 1300, y: 800 },
+    initialVelocity: { x: 2, y: -2 },
   },
 ];
 
@@ -90,6 +144,9 @@ const container = ref<HTMLDivElement | null>(null);
 const ball0 = ref(null);
 const ball1 = ref(null);
 const ball2 = ref(null);
+const ball3 = ref(null);
+const ball4 = ref(null);
+const ball5 = ref(null);
 
 const updateContainerBounds = () => {
   if (container.value) {
@@ -125,13 +182,37 @@ const handleBallCollision = (ballA: any, ballB: any) => {
   const velocityA = ballA.getVelocity();
   const velocityB = ballB.getVelocity();
 
+  const rectA = ballA.getBoundingClientRect();
+  const rectB = ballB.getBoundingClientRect();
+
+  const centerA = {
+    x: rectA.left + rectA.width / 2,
+    y: rectA.top + rectA.height / 2,
+  };
+  const centerB = {
+    x: rectB.left + rectB.width / 2,
+    y: rectB.top + rectB.height / 2,
+  };
+
+  const dx = centerB.x - centerA.x;
+  const dy = centerB.y - centerA.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  if (distance === 0) return;
+
+  const nx = dx / distance;
+  const ny = dy / distance;
+
+  const dotProductA = velocityA.x * nx + velocityA.y * ny;
+  const dotProductB = velocityB.x * nx + velocityB.y * ny;
+
   const newVelocityA = {
-    x: -velocityA.x,
-    y: -velocityA.y,
+    x: velocityA.x - 2 * dotProductA * nx,
+    y: velocityA.y - 2 * dotProductA * ny,
   };
   const newVelocityB = {
-    x: -velocityB.x,
-    y: -velocityB.y,
+    x: velocityB.x - 2 * dotProductB * nx,
+    y: velocityB.y - 2 * dotProductB * ny,
   };
 
   ballA.setVelocity(newVelocityA);
@@ -139,7 +220,14 @@ const handleBallCollision = (ballA: any, ballB: any) => {
 };
 
 const checkCollisions = () => {
-  const balls = [ball0.value, ball1.value, ball2.value];
+  const balls = [
+    ball0.value,
+    ball1.value,
+    ball2.value,
+    ball3.value,
+    ball4.value,
+    ball5.value,
+  ];
 
   for (let i = 0; i < balls.length; i++) {
     const ballA = balls[i];
