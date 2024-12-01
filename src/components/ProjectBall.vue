@@ -38,13 +38,6 @@ const props = defineProps<{
   containerBounds: Bounds;
 }>();
 
-const emit = defineEmits<{
-  (
-    event: "ball-data",
-    data: { velocity: Position; boundingRect: DOMRect },
-  ): void;
-}>();
-
 const position = reactive({ ...props.initialPosition });
 const velocity = reactive({ ...props.initialVelocity });
 
@@ -64,18 +57,9 @@ const moveBall = () => {
   if (position.y <= 0 || position.y + props.size >= height) {
     velocity.y *= -1;
   }
-
-  if (ball.value) {
-    const boundingRect = ball.value.getBoundingClientRect();
-    emit("ball-data", {
-      velocity: { ...velocity },
-      boundingRect,
-    });
-  }
 };
 
 const handleMouseEnter = () => {
-  console.log("Hover detected");
   if (moveInterval !== null) {
     clearInterval(moveInterval);
     moveInterval = null;
@@ -83,10 +67,20 @@ const handleMouseEnter = () => {
 };
 
 const handleMouseLeave = () => {
-  console.log("Mouse left");
   if (moveInterval === null) {
     moveInterval = window.setInterval(moveBall, 16);
   }
+};
+
+const getBoundingClientRect = () => {
+  return ball.value?.getBoundingClientRect() ?? null;
+};
+
+const handleCollision = () => {
+  velocity.x *= -1;
+  velocity.y *= -1;
+  position.x += velocity.x;
+  position.y += velocity.y;
 };
 
 onMounted(() => {
@@ -97,6 +91,11 @@ onBeforeUnmount(() => {
   if (moveInterval !== null) {
     clearInterval(moveInterval);
   }
+});
+
+defineExpose({
+  getBoundingClientRect,
+  handleCollision,
 });
 </script>
 

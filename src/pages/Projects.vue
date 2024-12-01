@@ -4,86 +4,155 @@
     ref="container"
   >
     <ProjectBall
-      v-for="(project, index) in projects"
-      :key="index"
-      :id="project.id"
-      :name="project.name"
-      :color="project.color"
-      :size="project.size"
-      :initialPosition="project.initialPosition"
-      :initialVelocity="project.initialVelocity"
+      :id="projects[0].id"
+      ref="ball0"
+      :name="projects[0].name"
+      :color="projects[0].color"
+      :size="projects[0].size"
+      :initialPosition="projects[0].initialPosition"
+      :initialVelocity="projects[0].initialVelocity"
       :containerBounds="containerBounds"
-      @update-rect="updateRect"
+    />
+    <ProjectBall
+      :id="projects[1].id"
+      ref="ball1"
+      :name="projects[1].name"
+      :color="projects[1].color"
+      :size="projects[1].size"
+      :initialPosition="projects[1].initialPosition"
+      :initialVelocity="projects[1].initialVelocity"
+      :containerBounds="containerBounds"
+    />
+    <ProjectBall
+      :id="projects[2].id"
+      ref="ball2"
+      :name="projects[2].name"
+      :color="projects[2].color"
+      :size="projects[2].size"
+      :initialPosition="projects[2].initialPosition"
+      :initialVelocity="projects[2].initialVelocity"
+      :containerBounds="containerBounds"
     />
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import ProjectBall from "../components/ProjectBall.vue";
 
-export default {
-  name: "Projects",
-  components: {
-    ProjectBall,
-  },
-  data() {
-    return {
-      projects: [
-        {
-          id: 0,
-          name: "Project 1",
-          color: "red",
-          size: 150,
-          initialPosition: { x: 100, y: 100 },
-          initialVelocity: { x: 2, y: 2 },
-        },
-        {
-          id: 1,
-          name: "Project 2",
-          color: "blue",
-          size: 250,
-          initialPosition: { x: 300, y: 200 },
-          initialVelocity: { x: -2, y: 3 },
-        },
-        {
-          id: 2,
-          name: "Project 3",
-          color: "green",
-          size: 350,
-          initialPosition: { x: 500, y: 400 },
-          initialVelocity: { x: 1, y: -2 },
-        },
-      ],
-      containerBounds: { width: 0, height: 0 },
-      ballRects: [],
-    };
-  },
-  mounted() {
-    this.updateContainerBounds();
-    window.addEventListener("resize", this.updateContainerBounds);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.updateContainerBounds);
-  },
-  methods: {
-    updateContainerBounds() {
-      const container = this.$refs.container.getBoundingClientRect();
-      this.containerBounds = {
-        width: container.width,
-        height: container.height,
-      };
-    },
-    updateRect({ id, rect }) {
-      const index = this.ballRects.findIndex((ball) => ball.id === id);
+interface Project {
+  id: number;
+  ref: String;
+  name: string;
+  color: string;
+  size: number;
+  initialPosition: { x: number; y: number };
+  initialVelocity: { x: number; y: number };
+}
 
-      if (index !== -1) {
-        this.ballRects[index].rect = rect;
-      } else {
-        this.ballRects.push({ id, rect });
-      }
-    },
+const projects = <Project[]>[
+  {
+    id: 0,
+    name: "Project 1",
+    color: "red",
+    size: 150,
+    initialPosition: { x: 100, y: 100 },
+    initialVelocity: { x: 2, y: 2 },
   },
+  {
+    id: 1,
+    name: "Project 2",
+    color: "blue",
+    size: 250,
+    initialPosition: { x: 300, y: 200 },
+    initialVelocity: { x: -2, y: 3 },
+  },
+  {
+    id: 2,
+    name: "Project 3",
+    color: "green",
+    size: 350,
+    initialPosition: { x: 500, y: 400 },
+    initialVelocity: { x: 1, y: -2 },
+  },
+];
+
+const containerBounds = reactive<{ width: number; height: number }>({
+  width: 0,
+  height: 0,
+});
+
+const container = ref<HTMLDivElement | null>(null);
+
+const ball0 = ref(null);
+const ball1 = ref(null);
+const ball2 = ref(null);
+
+const updateContainerBounds = () => {
+  if (container.value) {
+    const bounds = container.value.getBoundingClientRect();
+    containerBounds.width = bounds.width;
+    containerBounds.height = bounds.height;
+  }
 };
+
+const checkCollisions = () => {
+  const balls = [ball0.value, ball1.value, ball2.value];
+  for (let i = 0; i < balls.length; i++) {
+    const ballA = balls[i];
+    if (!ballA) continue;
+
+    const rectA = ballA.getBoundingClientRect();
+    const centerA = {
+      x: rectA.left + rectA.width / 2,
+      y: rectA.top + rectA.height / 2,
+    };
+    const radiusA = rectA.width / 2;
+
+    for (let j = i + 1; j < balls.length; j++) {
+      const ballB = balls[j];
+      if (!ballB) continue;
+
+      const rectB = ballB.getBoundingClientRect();
+      const centerB = {
+        x: rectB.left + rectB.width / 2,
+        y: rectB.top + rectB.height / 2,
+      };
+      const radiusB = rectB.width / 2;
+
+      const dx = centerB.x - centerA.x;
+      const dy = centerB.y - centerA.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= radiusA + radiusB) {
+        console.log(`Collision detected between ball ${i} and ball ${j}`);
+        ballA.handleCollision();
+        ballB.handleCollision();
+      }
+    }
+  }
+};
+
+function intersect(a: DOMRect, b: DOMRect): boolean {
+  return (
+    a.left <= b.right &&
+    b.left <= a.right &&
+    a.top <= b.bottom &&
+    b.top <= a.bottom
+  );
+}
+
+const collisionsInterval = ref(null);
+onMounted(() => {
+  updateContainerBounds();
+  window.addEventListener("resize", updateContainerBounds);
+  collisionsInterval.value = setInterval(checkCollisions, 16);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateContainerBounds);
+  clearInterval(collisionsInterval.value);
+});
 </script>
 
 <style scoped>
