@@ -76,7 +76,7 @@ interface Position {
 }
 
 interface Project {
-  id: number;
+  id: string;
   name: string;
   color: string;
   size: number;
@@ -86,7 +86,7 @@ interface Project {
 
 const projects = <Project[]>[
   {
-    id: 0,
+    id: "ball0",
     name: "Project 1",
     color: "red",
     size: 150,
@@ -94,7 +94,7 @@ const projects = <Project[]>[
     initialVelocity: { x: 2, y: 2 },
   },
   {
-    id: 1,
+    id: "ball1",
     name: "Project 2",
     color: "blue",
     size: 250,
@@ -102,7 +102,7 @@ const projects = <Project[]>[
     initialVelocity: { x: -1.5, y: 1.5 },
   },
   {
-    id: 2,
+    id: "ball2",
     name: "Project 3",
     color: "green",
     size: 350,
@@ -110,7 +110,7 @@ const projects = <Project[]>[
     initialVelocity: { x: 1, y: -1 },
   },
   {
-    id: 3,
+    id: "ball3",
     name: "Project 4",
     color: "yellow",
     size: 250,
@@ -118,7 +118,7 @@ const projects = <Project[]>[
     initialVelocity: { x: 1.5, y: -1.5 },
   },
   {
-    id: 4,
+    id: "ball4",
     name: "Project 5",
     color: "orange",
     size: 350,
@@ -126,7 +126,7 @@ const projects = <Project[]>[
     initialVelocity: { x: 1, y: 1 },
   },
   {
-    id: 5,
+    id: "ball5",
     name: "Project 6",
     color: "violet",
     size: 150,

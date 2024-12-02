@@ -1,9 +1,12 @@
 <template>
   <div
-    class="project-ball absolute z-20 flex aspect-square items-center justify-center rounded-full hover:cursor-pointer"
+    class="project-ball floating absolute z-20 flex aspect-square items-center justify-center rounded-full transition-shadow duration-300 hover:cursor-pointer"
+    :id="props.id"
     :style="{
-      backgroundColor: color,
+      '--x': position.x + 'px',
+      '--y': position.y + 'px',
       width: size + 'px',
+      backgroundColor: color,
       transform: `translate(${position.x}px, ${position.y}px)`,
     }"
     @mouseenter="handleMouseEnter"
@@ -17,7 +20,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 
-// Props definition
 interface Position {
   x: number;
   y: number;
@@ -29,7 +31,7 @@ interface Bounds {
 }
 
 const props = defineProps<{
-  id: number;
+  id: string;
   name: string;
   color: string;
   size: number;
@@ -107,4 +109,23 @@ defineExpose({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+@keyframes float {
+  0% {
+    transform: translate(var(--x), var(--y)) scale(100%);
+    box-shadow: 0 0 30px 2px greenyellow;
+  }
+  50% {
+    transform: translate(var(--x), var(--y)) scale(105%);
+    box-shadow: 0 0 30px 10px greenyellow;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(100%);
+    box-shadow: 0 0 30px 2px greenyellow;
+  }
+}
+.floating:hover {
+  animation: float 4s ease-in infinite;
+  box-shadow: 0 0 30px 5px greenyellow;
+}
+</style>
