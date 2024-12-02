@@ -11,6 +11,7 @@
     }"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @isMouseDown="dragMouse"
     ref="ball"
   >
     {{ name }}
@@ -18,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
+import { ref, reactive, onMounted, onBeforeUnmount, watch } from "vue";
 
 interface Position {
   x: number;
@@ -29,6 +30,8 @@ interface Bounds {
   width: number;
   height: number;
 }
+
+const isMouseDown = ref(null);
 
 const props = defineProps<{
   id: string;
@@ -46,6 +49,12 @@ const velocity = reactive({ ...props.initialVelocity });
 const ball = ref<HTMLDivElement | null>(null);
 
 let moveInterval: number | null = null;
+
+const dragMouse = (event: MouseEvent) => {
+  console.log("coucou");
+  position.x = event.clientX - props.size / 2;
+  position.y = event.clientY - props.size / 2;
+};
 
 const moveBall = () => {
   position.x += velocity.x;
