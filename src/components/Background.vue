@@ -1,10 +1,18 @@
 <template>
-  <canvas
-    @mousedown="hyperspace = true"
-    @mouseup="hyperspace = false"
-    ref="starCanvas"
-    class="star-canvas"
-  ></canvas>
+  <div class="absolute left-0 top-0 h-screen w-full">
+    <div
+      :class="`absolute -z-10 h-full w-full bg-black transition-opacity duration-1000 ${hyperspace ? 'opacity-0' : 'opacity-100'}`"
+    ></div>
+    <div
+      class="bg-grad-blue-black absolute -z-20 h-full w-full opacity-100"
+    ></div>
+    <canvas
+      @mousedown="hyperspace = true"
+      @mouseup="hyperspace = false"
+      ref="starCanvas"
+      :class="`star-canvas`"
+    ></canvas>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -41,7 +49,7 @@ const createStar = () => {
   const centerY = window.innerHeight / 2;
 
   const angle = Math.random() * Math.PI * 2;
-  const radius = Math.random() * 3000;
+  const radius = 200 + Math.random() * 3000;
 
   const x = centerX + Math.cos(angle) * radius;
   const y = centerY + Math.sin(angle) * radius;
@@ -55,7 +63,7 @@ const createStar = () => {
     size: Math.random() * 5 + 6,
     velocityX: Math.cos(angle) * speed,
     velocityY: Math.sin(angle) * speed,
-    velocityZ: Math.random() * 3 + 1.5,
+    velocityZ: Math.random() * 3 + 2,
     hyperspacePosX: x,
     hyperspacePosY: y,
   };
@@ -72,7 +80,9 @@ watch(hyperspace, (oldValue, newValue) => {
 });
 
 const populateStars = () => {
-  stars.push(createStar());
+  if (!hyperspace.value) {
+    stars.push(createStar());
+  }
 };
 
 const drawStar = (star: IStar) => {
@@ -109,9 +119,12 @@ const drawStar = (star: IStar) => {
 const updateStars = () => {
   for (let i = stars.length - 1; i >= 0; i--) {
     const star = stars[i];
-    star.x -= star.velocityX;
-    star.y -= star.velocityY;
-    if (!hyperspace.value) {
+    if (hyperspace.value) {
+      star.x -= 10 * star.velocityX;
+      star.y -= 10 * star.velocityY;
+    } else {
+      star.x -= star.velocityX;
+      star.y -= star.velocityY;
       star.z -= star.velocityZ;
       if (star.z <= 0) {
         stars.splice(i, 1);
@@ -155,6 +168,5 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: black;
 }
 </style>
