@@ -1,6 +1,6 @@
 <template>
   <div
-    class="projects-page star-wars-bg relative h-screen w-full overflow-hidden"
+    class="projects-page relative h-screen w-full overflow-hidden"
     ref="container"
   >
     <ProjectBall

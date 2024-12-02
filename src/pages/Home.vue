@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="h-0 w-full sticky top-0">
-      <div class="star-wars-bg h-screen w-full"></div>
-    </div>
     <div>
       <Presentation />
       <div class="-mt-[2000px]">

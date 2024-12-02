@@ -1,16 +1,16 @@
 <template>
-  <div class="absolute left-0 top-0 h-screen w-full">
+  <div class="sticky top-0 h-0 w-full">
     <div
-      :class="`absolute -z-10 h-full w-full bg-black transition-opacity duration-1000 ${hyperspace ? 'opacity-0' : 'opacity-100'}`"
+      :class="`absolute -z-10 h-screen w-full bg-black transition-opacity duration-1000 ${hyperspace ? 'opacity-0' : 'opacity-100'}`"
     ></div>
     <div
-      class="bg-grad-blue-black absolute -z-20 h-full w-full opacity-100"
+      class="bg-grad-blue-black absolute -z-20 h-screen w-full opacity-100"
     ></div>
     <canvas
       @mousedown="hyperspace = true"
       @mouseup="hyperspace = false"
       ref="starCanvas"
-      :class="`star-canvas`"
+      :class="`star-canvas h-screen`"
     ></canvas>
   </div>
 </template>
@@ -167,6 +167,5 @@ onBeforeUnmount(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
 }
 </style>

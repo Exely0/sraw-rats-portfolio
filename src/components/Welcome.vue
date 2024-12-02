@@ -3,7 +3,7 @@
     <div
       class="sticky top-0 flex h-screen w-full justify-center overflow-hidden"
     >
-      <div class="intro-container border-2 border-red-500">
+      <div class="intro-container">
         <p class="text-animation text-xl font-semibold text-white">
           A long time ago in a galaxy far, far away... A long time ago in a
           galaxy far, far away... A long time ago in a galaxy far, far away... A
