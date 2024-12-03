@@ -5,6 +5,7 @@ export default {
     extend: {
       backgroundImage: {
         "grad-blue-black": "radial-gradient(circle, #00162a, black)",
+        "grad-lightblue-black": "radial-gradient(circle, #1c2951, #00162a)",
       },
     },
   },

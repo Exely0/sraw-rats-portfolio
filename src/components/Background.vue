@@ -1,14 +1,18 @@
 <template>
   <div class="sticky top-0 h-0 w-full">
     <div
-      :class="`absolute -z-10 h-screen w-full bg-black transition-opacity duration-1000 ${hyperspace ? 'opacity-0' : 'opacity-100'}`"
+      :class="`absolute -z-10 h-screen w-full bg-black transition-opacity duration-1000 ${hyperspaceChan || hyperspaceSpeed ? 'opacity-0' : 'opacity-100'}`"
+    ></div>
+
+    <div
+      :class="`absolute ${hyperspaceSpeed ? 'opacity-0' : 'opacity-100'} -z-20 h-screen w-full bg-grad-blue-black transition-opacity duration-1000`"
     ></div>
     <div
-      class="bg-grad-blue-black absolute -z-20 h-screen w-full opacity-100"
+      :class="`bg-grad-lightblue-black absolute -z-30 h-screen w-full opacity-100`"
     ></div>
     <canvas
-      @mousedown="hyperspace = true"
-      @mouseup="hyperspace = false"
+      @mousedown="hyperspaceChan = true"
+      @mouseup="hyperspaceChan = false"
       ref="starCanvas"
       :class="`star-canvas h-screen`"
     ></canvas>
@@ -26,8 +30,10 @@ interface IStar {
   velocityX: number;
   velocityY: number;
   velocityZ: number;
-  hyperspacePosX: number | null;
-  hyperspacePosY: number | null;
+  hyperspaceChanPosX: number | null;
+  hyperspaceChanPosY: number | null;
+  originX: number;
+  originY: number;
 }
 
 const starCanvas = ref<HTMLCanvasElement | null>(null);
@@ -35,7 +41,9 @@ let ctx: CanvasRenderingContext2D | null = null;
 const stars: Array<IStar> = [];
 let animationIntervalId: number;
 let starFactoryId: number;
-const hyperspace = ref(false);
+const hyperspaceChan = ref(false);
+const hyperspaceSpeed = ref(false);
+const hyperspaceChannelingTime = ref(0);
 
 const initializeCanvas = () => {
   const canvas = starCanvas.value;
@@ -64,24 +72,32 @@ const createStar = () => {
     velocityX: Math.cos(angle) * speed,
     velocityY: Math.sin(angle) * speed,
     velocityZ: Math.random() * 3 + 2,
-    hyperspacePosX: x,
-    hyperspacePosY: y,
+    hyperspaceChanPosX: x,
+    hyperspaceChanPosY: y,
+    originX: x,
+    originY: y,
   };
 };
 
-watch(hyperspace, (oldValue, newValue) => {
+watch(hyperspaceChan, (oldValue, newValue) => {
   if (oldValue == true && newValue == false) {
-    console.log("coucou");
+    hyperspaceChannelingTime.value = 0;
     stars.forEach((star) => {
-      star.hyperspacePosX = star.x;
-      star.hyperspacePosY = star.y;
+      star.hyperspaceChanPosX = star.x;
+      star.hyperspaceChanPosY = star.y;
     });
   }
 });
 
 const populateStars = () => {
-  if (!hyperspace.value) {
-    stars.push(createStar());
+  if (!hyperspaceChan.value) {
+    if (hyperspaceSpeed.value) {
+      for (let i = 0; i < 20; i++) {
+        stars.push(createStar());
+      }
+    } else {
+      stars.push(createStar());
+    }
   }
 };
 
@@ -89,7 +105,35 @@ const drawStar = (star: IStar) => {
   if (!ctx) return;
   const scale = 100 / star.z;
   const size = star.size * scale;
-  if (!hyperspace.value) {
+  if (hyperspaceSpeed.value) {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const x = (star.x - centerX) * scale + centerX;
+    const y = (star.y - centerY) * scale + centerY;
+    const originX = (star.originX - centerX) * scale + centerX;
+    const originY = (star.originY - centerY) * scale + centerY;
+    ctx.beginPath();
+    ctx.moveTo(originX, originY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = size * 1.4;
+    ctx.stroke();
+    ctx.closePath();
+  } else if (hyperspaceChan.value) {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const x = (star.x - centerX) * scale + centerX;
+    const y = (star.y - centerY) * scale + centerY;
+    const hyperX = (star.hyperspaceChanPosX - centerX) * scale + centerX;
+    const hyperY = (star.hyperspaceChanPosY - centerY) * scale + centerY;
+    ctx.beginPath();
+    ctx.moveTo(hyperX, hyperY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = size;
+    ctx.stroke();
+    ctx.closePath();
+  } else {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     const x = (star.x - centerX) * scale + centerX;
@@ -99,33 +143,23 @@ const drawStar = (star: IStar) => {
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.closePath();
-  } else {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    const x = (star.x - centerX) * scale + centerX;
-    const y = (star.y - centerY) * scale + centerY;
-    const hyperX = (star.hyperspacePosX - centerX) * scale + centerX;
-    const hyperY = (star.hyperspacePosY - centerY) * scale + centerY;
-    ctx.beginPath();
-    ctx.moveTo(hyperX, hyperY);
-    ctx.lineTo(x, y);
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = size;
-    ctx.stroke();
-    ctx.closePath();
   }
 };
 
 const updateStars = () => {
   for (let i = stars.length - 1; i >= 0; i--) {
     const star = stars[i];
-    if (hyperspace.value) {
+    if (hyperspaceChan.value) {
       star.x -= 10 * star.velocityX;
       star.y -= 10 * star.velocityY;
     } else {
       star.x -= star.velocityX;
       star.y -= star.velocityY;
-      star.z -= star.velocityZ;
+      if (hyperspaceSpeed.value) {
+        star.z -= 30 * star.velocityZ;
+      } else {
+        star.z -= star.velocityZ;
+      }
       if (star.z <= 0) {
         stars.splice(i, 1);
       }
@@ -136,6 +170,17 @@ const updateStars = () => {
 const animate = () => {
   if (!ctx) return;
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  if (hyperspaceChan.value) {
+    hyperspaceChannelingTime.value += 16;
+  }
+  if (hyperspaceChannelingTime.value >= 2000 && !hyperspaceChan.value) {
+    hyperspaceSpeed.value = true;
+    hyperspaceChannelingTime.value = 0;
+    setTimeout(() => {
+      hyperspaceSpeed.value = false;
+    }, 2000);
+  }
   updateStars();
   for (const star of stars) {
     drawStar(star);
