@@ -22,6 +22,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useHyperspaceStore } from "../store/hyperspace";
+import { useSettingsStore } from "../store/settings";
+import { storeToRefs } from "pinia";
+import { RefSymbol } from "@vue/reactivity";
 
 interface IStar {
   x: number;
@@ -46,6 +49,8 @@ const hyperspaceChan = ref(false);
 const hyperspaceSpeed = ref(false);
 const hyperspaceChannelingTime = ref(0);
 const hyperspaceStore = useHyperspaceStore();
+const settingsStore = useSettingsStore();
+const { movingStars } = storeToRefs(settingsStore);
 
 watch(
   () => hyperspaceStore.triggerHyperspaceChan,
@@ -76,12 +81,12 @@ const createStar = () => {
   const centerY = window.innerHeight / 2;
 
   const angle = Math.random() * Math.PI * 2;
-  const radius = 200 + Math.random() * 3000;
+  const radius = 200 + Math.random() * 10000;
 
   const x = centerX + Math.cos(angle) * radius;
   const y = centerY + Math.sin(angle) * radius;
 
-  const speed = -(Math.random() * 1 + 2);
+  const speed = -(Math.random() * 2 + 1);
 
   return {
     x,
@@ -90,7 +95,7 @@ const createStar = () => {
     size: Math.random() * 5 + 6,
     velocityX: Math.cos(angle) * speed,
     velocityY: Math.sin(angle) * speed,
-    velocityZ: Math.random() * 5 + 1,
+    velocityZ: Math.random() * 3 + 1,
     hyperspaceChanPosX: x,
     hyperspaceChanPosY: y,
     originX: x,
@@ -108,14 +113,26 @@ watch(hyperspaceChan, (oldValue, newValue) => {
   }
 });
 
+watch(movingStars, (newValue) => {
+  if (newValue) {
+    animationIntervalId = setInterval(animate, 16);
+    starFactoryId = setInterval(populateStars, 50);
+  } else {
+    clearInterval(animationIntervalId);
+    clearInterval(starFactoryId);
+  }
+});
+
 const populateStars = () => {
   if (!hyperspaceChan.value) {
     if (hyperspaceSpeed.value) {
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 200; i++) {
         stars.push(createStar());
       }
     } else {
-      stars.push(createStar());
+      for (let i = 0; i < 2; i++) {
+        stars.push(createStar());
+      }
     }
   }
 };

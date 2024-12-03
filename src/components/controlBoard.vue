@@ -12,6 +12,17 @@
           ></div>
         </div>
       </div>
+      <div>
+        <div class="text-white">Moving stars</div>
+        <div
+          class="relative box-content h-[35px] w-[80px] rounded-full border-2 border-[#fdbf13] bg-black hover:cursor-pointer"
+          @click="movingStars = !movingStars"
+        >
+          <div
+            :class="`absolute right-[4px] top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${movingStars ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
+          ></div>
+        </div>
+      </div>
     </div>
     <div
       class="fixed bottom-0 left-1/2 z-50 flex h-32 origin-left -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
@@ -49,8 +60,12 @@
 import { ref } from "vue";
 import router from "../router";
 import { useHyperspaceStore } from "../store/hyperspace";
+import { useSettingsStore } from "../store/settings";
+import { storeToRefs } from "pinia";
 
 const hyperspaceStore = useHyperspaceStore();
+const settingsStore = useSettingsStore();
+const { hyperspaceEnabled, movingStars } = storeToRefs(settingsStore);
 
 const handleClick = (route: string) => {
   if (hyperspaceEnabled.value) {
@@ -66,8 +81,6 @@ const handleClick = (route: string) => {
     });
   }
 };
-
-const hyperspaceEnabled = ref(true);
 
 interface IPages {
   [x: number]: {
