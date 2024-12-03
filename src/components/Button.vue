@@ -75,7 +75,7 @@ const handleClick = () => {
     router.push(props.route).catch((err) => {
       console.error("Navigation error:", err);
     });
-  }, 2000);
+  }, 2300);
 };
 </script>
 

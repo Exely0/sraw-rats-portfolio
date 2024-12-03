@@ -90,7 +90,7 @@ const createStar = () => {
     size: Math.random() * 5 + 6,
     velocityX: Math.cos(angle) * speed,
     velocityY: Math.sin(angle) * speed,
-    velocityZ: Math.random() * 3 + 2,
+    velocityZ: Math.random() * 5 + 1,
     hyperspaceChanPosX: x,
     hyperspaceChanPosY: y,
     originX: x,
@@ -135,7 +135,7 @@ const drawStar = (star: IStar) => {
     ctx.moveTo(originX, originY);
     ctx.lineTo(x, y);
     ctx.strokeStyle = "white";
-    ctx.lineWidth = size * 1.4;
+    ctx.lineWidth = size * 4;
     ctx.stroke();
     ctx.closePath();
   } else if (hyperspaceChan.value) {
