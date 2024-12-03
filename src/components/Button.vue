@@ -1,7 +1,7 @@
 <template>
   <div
     class="group relative aspect-square w-[250px] hover:cursor-pointer"
-    @click="navigateToRoute"
+    @click="handleClick"
   >
     <div
       class="bg-black-500 group absolute z-10 flex aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer items-center justify-center overflow-hidden border-2 border-yellow-500 bg-black text-5xl font-semibold text-white transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0"
@@ -21,48 +21,61 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Button",
-  props: {
-    text: {
-      type: String,
-      required: true,
-    },
-    route: {
-      type: String,
-      required: true,
-    },
-  },
-  methods: {
-    handleMouseEnter(event) {
-      const container = this.$refs.textContainer;
-      const bg = this.$refs.dynamicBg;
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useHyperspaceStore } from "../store/hyperspace";
 
-      const rect = container.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+interface ButtonProps {
+  text: string;
+  route: string;
+}
 
-      bg.style.left = `${x}px`;
-      bg.style.top = `${y}px`;
-    },
-    handleMouseLeave(event) {
-      const container = this.$refs.textContainer;
-      const bg = this.$refs.dynamicBg;
+const emit = defineEmits(["fade-away"]);
 
-      const rect = container.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+const hyperspaceStore = useHyperspaceStore();
+const props = defineProps<ButtonProps>();
+const router = useRouter();
 
-      bg.style.left = `${x}px`;
-      bg.style.top = `${y}px`;
-    },
-    navigateToRoute() {
-      this.$router.push(this.route).catch((err) => {
-        console.error("Navigation error:", err);
-      });
-    },
-  },
+const textContainer = ref<HTMLDivElement | null>(null);
+const dynamicBg = ref<HTMLDivElement | null>(null);
+
+const handleMouseEnter = (event: MouseEvent) => {
+  if (!textContainer.value || !dynamicBg.value) return;
+
+  const container = textContainer.value;
+  const bg = dynamicBg.value;
+
+  const rect = container.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  bg.style.left = `${x}px`;
+  bg.style.top = `${y}px`;
+};
+
+const handleMouseLeave = (event: MouseEvent) => {
+  if (!textContainer.value || !dynamicBg.value) return;
+
+  const container = textContainer.value;
+  const bg = dynamicBg.value;
+
+  const rect = container.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  bg.style.left = `${x}px`;
+  bg.style.top = `${y}px`;
+};
+
+const handleClick = () => {
+  hyperspaceStore.triggerHyperspaceChan = true;
+  emit("fade-away", true);
+  setTimeout(() => {
+    router.push(props.route).catch((err) => {
+      console.error("Navigation error:", err);
+    });
+  }, 2000);
 };
 </script>
 

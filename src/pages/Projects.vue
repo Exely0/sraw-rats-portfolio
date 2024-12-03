@@ -1,6 +1,6 @@
 <template>
   <div
-    class="projects-page relative h-screen w-full overflow-hidden"
+    class="fade-in projects-page relative h-screen w-full overflow-hidden"
     ref="container"
   >
     <ProjectBall
@@ -261,5 +261,22 @@ onBeforeUnmount(() => {
 <style scoped>
 .star-wars-bg {
   background: url(../assets/intro-background.png) center/cover repeat;
+}
+
+.fade-away {
+  animation: fade-away 1.5s ease-in;
+}
+
+.fade-in {
+  animation: fade-away 2s ease-in reverse;
+}
+
+@keyframes fade-away {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>

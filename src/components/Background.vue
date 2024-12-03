@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 h-0 w-full">
+  <div class="fade-in sticky top-0 h-0 w-full">
     <div
       :class="`absolute -z-10 h-screen w-full bg-black transition-opacity duration-1000 ${hyperspaceChan || hyperspaceSpeed ? 'opacity-0' : 'opacity-100'}`"
     ></div>
@@ -8,7 +8,7 @@
       :class="`absolute ${hyperspaceSpeed ? 'opacity-0' : 'opacity-100'} -z-20 h-screen w-full bg-grad-blue-black transition-opacity duration-1000`"
     ></div>
     <div
-      :class="`bg-grad-lightblue-black absolute -z-30 h-screen w-full opacity-100`"
+      :class="`absolute -z-30 h-screen w-full bg-grad-lightblue-black opacity-100`"
     ></div>
     <canvas
       @mousedown="hyperspaceChan = true"
@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { useHyperspaceStore } from "../store/hyperspace";
 
 interface IStar {
   x: number;
@@ -44,6 +45,24 @@ let starFactoryId: number;
 const hyperspaceChan = ref(false);
 const hyperspaceSpeed = ref(false);
 const hyperspaceChannelingTime = ref(0);
+const hyperspaceStore = useHyperspaceStore();
+
+watch(
+  () => hyperspaceStore.triggerHyperspaceChan,
+  (value) => {
+    if (value) {
+      manualActivation();
+      hyperspaceStore.triggerHyperspaceChan = false;
+    }
+  },
+);
+
+const manualActivation = () => {
+  hyperspaceChan.value = true;
+  setTimeout(() => {
+    hyperspaceChan.value = false;
+  }, 1100);
+};
 
 const initializeCanvas = () => {
   const canvas = starCanvas.value;
@@ -174,12 +193,12 @@ const animate = () => {
   if (hyperspaceChan.value) {
     hyperspaceChannelingTime.value += 16;
   }
-  if (hyperspaceChannelingTime.value >= 2000 && !hyperspaceChan.value) {
+  if (hyperspaceChannelingTime.value >= 1000 && !hyperspaceChan.value) {
     hyperspaceSpeed.value = true;
     hyperspaceChannelingTime.value = 0;
     setTimeout(() => {
       hyperspaceSpeed.value = false;
-    }, 2000);
+    }, 1000);
   }
   updateStars();
   for (const star of stars) {
