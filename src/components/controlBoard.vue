@@ -16,7 +16,14 @@
         <div class="text-white">Moving stars</div>
         <div
           class="relative box-content h-[35px] w-[80px] rounded-full border-2 border-[#fdbf13] bg-black hover:cursor-pointer"
-          @click="movingStars = !movingStars"
+          @click="
+            () => {
+              if (movingStars == true) {
+                hyperspaceEnabled = false;
+              }
+              movingStars = !movingStars;
+            }
+          "
         >
           <div
             :class="`absolute right-[4px] top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${movingStars ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
