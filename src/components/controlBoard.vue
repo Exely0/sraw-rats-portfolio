@@ -5,7 +5,14 @@
         <div class="text-white">Slow loading</div>
         <div
           class="relative box-content h-[35px] w-[80px] rounded-full border-2 border-[#fdbf13] bg-black hover:cursor-pointer"
-          @click="hyperspaceEnabled = !hyperspaceEnabled"
+          @click="
+            () => {
+              if (hyperspaceEnabled == false) {
+                movingStars = true;
+              }
+              hyperspaceEnabled = !hyperspaceEnabled;
+            }
+          "
         >
           <div
             :class="`absolute right-[4px] top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${hyperspaceEnabled ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
