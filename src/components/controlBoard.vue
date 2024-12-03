@@ -80,10 +80,12 @@ import { storeToRefs } from "pinia";
 const hyperspaceStore = useHyperspaceStore();
 const settingsStore = useSettingsStore();
 const { hyperspaceEnabled, movingStars } = storeToRefs(settingsStore);
+const { triggerFadeAway } = storeToRefs(hyperspaceStore);
 
 const handleClick = (route: string) => {
   if (hyperspaceEnabled.value) {
     hyperspaceStore.triggerHyperspaceChan = true;
+    triggerFadeAway.value = !triggerFadeAway.value;
     setTimeout(() => {
       router.push(route).catch((err) => {
         console.error("Navigation error:", err);

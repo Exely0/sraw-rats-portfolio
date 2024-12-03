@@ -24,7 +24,6 @@ import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useHyperspaceStore } from "../store/hyperspace";
 import { useSettingsStore } from "../store/settings";
 import { storeToRefs } from "pinia";
-import { RefSymbol } from "@vue/reactivity";
 
 interface IStar {
   x: number;
@@ -126,7 +125,7 @@ watch(movingStars, (newValue) => {
 const populateStars = () => {
   if (!hyperspaceChan.value) {
     if (hyperspaceSpeed.value) {
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 100; i++) {
         stars.push(createStar());
       }
     } else {

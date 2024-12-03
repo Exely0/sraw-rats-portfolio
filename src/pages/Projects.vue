@@ -262,10 +262,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.star-wars-bg {
-  background: url(../assets/intro-background.png) center/cover repeat;
-}
-
 .fade-away {
   animation: fade-away 1.5s ease-in;
 }
