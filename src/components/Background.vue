@@ -1,5 +1,5 @@
 <template>
-  <div class="fade-in sticky top-0 h-0 w-full">
+  <div class="fade-in sticky top-0 -z-10 h-0 w-full">
     <div
       :class="`absolute -z-10 h-screen w-full bg-black transition-opacity duration-1000 ${hyperspaceChan || hyperspaceSpeed ? 'opacity-0' : 'opacity-100'}`"
     ></div>
@@ -175,7 +175,7 @@ const updateStars = () => {
       star.x -= star.velocityX;
       star.y -= star.velocityY;
       if (hyperspaceSpeed.value) {
-        star.z -= 30 * star.velocityZ;
+        star.z -= 35 * star.velocityZ;
       } else {
         star.z -= star.velocityZ;
       }
