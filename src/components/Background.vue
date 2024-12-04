@@ -85,7 +85,7 @@ const createStar = () => {
   const x = centerX + Math.cos(angle) * radius;
   const y = centerY + Math.sin(angle) * radius;
 
-  const speed = -(Math.random() * 2 + 1);
+  const speed = -(Math.random() + 1);
 
   return {
     x,
@@ -94,7 +94,7 @@ const createStar = () => {
     size: Math.random() * 5 + 6,
     velocityX: Math.cos(angle) * speed,
     velocityY: Math.sin(angle) * speed,
-    velocityZ: Math.random() * 3 + 1,
+    velocityZ: Math.random() * 2 + 1,
     hyperspaceChanPosX: x,
     hyperspaceChanPosY: y,
     originX: x,
@@ -191,6 +191,8 @@ const updateStars = () => {
       star.x -= star.velocityX;
       star.y -= star.velocityY;
       if (hyperspaceSpeed.value) {
+        star.x -= 5 * star.velocityX;
+        star.y -= 5 * star.velocityY;
         star.z -= 35 * star.velocityZ;
       } else {
         star.z -= star.velocityZ;

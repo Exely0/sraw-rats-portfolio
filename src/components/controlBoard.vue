@@ -41,11 +41,7 @@
     <div
       class="fixed bottom-0 left-1/2 z-50 flex h-32 origin-left -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
     >
-      <div
-        class="triangle relative flex rotate-180 items-center justify-center border-4 border-[#fdbf13]"
-      >
-        <div class="diago-bl-tr"></div>
-      </div>
+      <div class="diago-lr border-b-4 border-r-4 border-[#fdbf13]"></div>
       <div
         v-for="(page, index) in pages"
         :key="index"
@@ -69,7 +65,7 @@
           class="triangle absolute bottom-0 right-0 aspect-square h-1/4 rotate-180 bg-[#fdbf13]"
         ></div>
       </div>
-      <div class="triangle -rotate-90 border-4 border-[#fdbf13]"></div>
+      <div class="diago-rl border-b-4 border-l-4 border-[#fdbf13]"></div>
     </div>
   </div>
 </template>
@@ -144,11 +140,25 @@ const pages: IPages = {
 }
 
 .diago-lr {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M1 0 L0 1 L99 100 L100 99' fill='#fdbf13' /><path d='M0 99 L99 0 L100 1 L1 100' fill='#fdbf13' /></svg>");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size:
-    100% 100%,
-    auto;
+  background: linear-gradient(
+    to top left,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) calc(48.5% - 2px),
+    #fdbf13 calc(48.5% - 2px),
+    #fdbf13 calc(48.5% + 2px),
+    rgba(0, 0, 0, 0) calc(48.5% + 2px),
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+.diago-rl {
+  background: linear-gradient(
+    to top right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) calc(48.5% - 2.5px),
+    #fdbf13 calc(48.5% - 2.5px),
+    #fdbf13 calc(48.5% + 2.5px),
+    rgba(0, 0, 0, 0) calc(48.5% + 2.5px),
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 </style>
