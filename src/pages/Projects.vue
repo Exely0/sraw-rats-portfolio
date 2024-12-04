@@ -1,7 +1,8 @@
 <template>
   <MainLayout>
+    <div class="z-50 h-screen w-full">wip</div>
     <div
-      class="fade-in projects-page relative h-screen w-full overflow-hidden"
+      class="projects-page relative h-screen w-full overflow-hidden"
       ref="container"
     >
       <ProjectBall
@@ -261,21 +262,4 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
-.fade-away {
-  animation: fade-away 1.5s ease-in;
-}
-
-.fade-in {
-  animation: fade-away 2s ease-in reverse;
-}
-
-@keyframes fade-away {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-</style>
+<style scoped></style>

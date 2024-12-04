@@ -15,18 +15,17 @@
         <div
           class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all"
         >
-          <div class="btn-1 translate-y-[1000px]">
-            <Button
-              text="Projets"
-              route="/projects"
-              @fade-away="triggerFadeAway"
-            />
-          </div>
-          <div class="btn-2 translate-y-[1000px]">
-            <Button text="CV" route="/projects" />
-          </div>
-          <div class="btn-3 translate-y-[1000px]">
-            <Button text="Contact" route="/projects" />
+          <div class="btn-1 translate-y-[1000px] text-6xl text-[#fdbf13]">
+            <div>
+              Explorez l'univers en utilisant les commandes du tableau de bord
+            </div>
+            <div class="mt-14 text-center">
+              <Icon
+                name="keyboard_double_arrow_down"
+                color="#fdbf13"
+                font-size="120px"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -38,7 +37,9 @@
 import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Button from "./Button.vue";
+import Icon from "./Icon.vue";
+
+const doubleArrow = ref("keyboard_double_arrow_down");
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -136,19 +137,5 @@ onMounted(() => {
   font-family: "Archivo", serif;
   letter-spacing: 0.8rem;
   bottom: 0;
-}
-
-.fade-away {
-  animation: fade-away 0.8s ease-in;
-  animation-fill-mode: forwards;
-}
-
-@keyframes fade-away {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
 }
 </style>

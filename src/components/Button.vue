@@ -4,12 +4,17 @@
     @click="handleClick"
   >
     <div
-      class="bg-black-500 group absolute z-10 flex aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer items-center justify-center overflow-hidden border-2 border-yellow-500 bg-black text-5xl font-semibold text-white transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0"
+      class="bg-black-500 group absolute z-10 flex aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer items-center justify-center overflow-hidden border-2 border-yellow-500 bg-black text-5xl font-semibold text-white transition-all duration-150 group-hover:translate-x-0 group-hover:translate-y-0"
       ref="textContainer"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
     >
-      {{ text }}
+      <slot></slot>
+      <a
+        href="mailto:lorris.pons@epitech.eu"
+        v-if="text == 'mail'"
+        class="absolute h-full w-full"
+      ></a>
       <div
         ref="dynamicBg"
         class="absolute -z-10 h-0 w-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-500 transition-all duration-500 group-hover:h-[300%] group-hover:w-[300%]"
@@ -23,19 +28,21 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { useHyperspaceStore } from "../store/hyperspace";
+import { useSettingsStore } from "../store/settings";
+import { storeToRefs } from "pinia";
 
 interface ButtonProps {
   text: string;
-  route: string;
+  url: string;
 }
 
 const emit = defineEmits(["fade-away"]);
 
 const hyperspaceStore = useHyperspaceStore();
+const settingsStore = useSettingsStore();
+const { hyperspaceEnabled } = storeToRefs(settingsStore);
 const props = defineProps<ButtonProps>();
-const router = useRouter();
 
 const textContainer = ref<HTMLDivElement | null>(null);
 const dynamicBg = ref<HTMLDivElement | null>(null);
@@ -69,13 +76,19 @@ const handleMouseLeave = (event: MouseEvent) => {
 };
 
 const handleClick = () => {
-  hyperspaceStore.triggerHyperspaceChan = true;
-  emit("fade-away", true);
-  setTimeout(() => {
-    router.push(props.route).catch((err) => {
-      console.error("Navigation error:", err);
-    });
-  }, 2300);
+  if (props.text == "mail") {
+    return;
+  }
+  if (hyperspaceEnabled.value) {
+    hyperspaceStore.triggerHyperspaceChan = true;
+    emit("fade-away", true);
+
+    setTimeout(() => {
+      window.open(props.url, "_blank");
+    }, 2100);
+  } else {
+    window.open(props.url, "_blank");
+  }
 };
 </script>
 

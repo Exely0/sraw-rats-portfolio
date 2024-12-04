@@ -15,7 +15,7 @@
           "
         >
           <div
-            :class="`absolute right-[4px] top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${hyperspaceEnabled ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
+            :class="`absolute top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${hyperspaceEnabled ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
           ></div>
         </div>
       </div>
@@ -33,7 +33,7 @@
           "
         >
           <div
-            :class="`absolute right-[4px] top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${movingStars ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
+            :class="`absolute top-[4px] h-[28px] w-[28px] rounded-full transition-all duration-150 ${movingStars ? 'right-[4px] bg-green-500' : 'right-[48px] bg-red-500'}`"
           ></div>
         </div>
       </div>
@@ -41,8 +41,11 @@
     <div
       class="fixed bottom-0 left-1/2 z-50 flex h-32 origin-left -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
     >
-      <div class="triangle rotate-180 bg-[#fdbf13]"></div>
-
+      <div
+        class="triangle relative flex rotate-180 items-center justify-center border-4 border-[#fdbf13]"
+      >
+        <div class="diago-bl-tr"></div>
+      </div>
       <div
         v-for="(page, index) in pages"
         :key="index"
@@ -66,7 +69,7 @@
           class="triangle absolute bottom-0 right-0 aspect-square h-1/4 rotate-180 bg-[#fdbf13]"
         ></div>
       </div>
-      <div class="triangle -rotate-90 bg-[#fdbf13]"></div>
+      <div class="triangle -rotate-90 border-4 border-[#fdbf13]"></div>
     </div>
   </div>
 </template>
@@ -90,7 +93,7 @@ const handleClick = (route: string) => {
       router.push(route).catch((err) => {
         console.error("Navigation error:", err);
       });
-    }, 2300);
+    }, 2100);
   } else {
     router.push(route).catch((err) => {
       console.error("Navigation error:", err);
@@ -119,7 +122,7 @@ const pages: IPages = {
   },
   3: {
     name: "contacts",
-    route: "/",
+    route: "/contacts",
   },
 };
 </script>
@@ -135,11 +138,17 @@ const pages: IPages = {
   background-position: 0 0;
   transition: background-position 0.3s ease-in-out;
 }
-
-.bg-split:hover {
-  /* background-position: 0 100%; */
-}
 .triangle {
   clip-path: polygon(0 0, 100% 0, 0 100%);
+  background-color: #fdbf13;
+}
+
+.diago-lr {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M1 0 L0 1 L99 100 L100 99' fill='#fdbf13' /><path d='M0 99 L99 0 L100 1 L1 100' fill='#fdbf13' /></svg>");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size:
+    100% 100%,
+    auto;
 }
 </style>
