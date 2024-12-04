@@ -75,23 +75,37 @@ import router from "../router";
 import { useHyperspaceStore } from "../store/hyperspace";
 import { useSettingsStore } from "../store/settings";
 import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 const hyperspaceStore = useHyperspaceStore();
 const settingsStore = useSettingsStore();
 const { hyperspaceEnabled, movingStars } = storeToRefs(settingsStore);
 const { triggerFadeAway } = storeToRefs(hyperspaceStore);
+const route = useRoute();
+const blockNewRoute = ref(false);
 
-const handleClick = (route: string) => {
+const handleClick = (rroute: string) => {
+  if (route.path == rroute) {
+    return;
+  }
+  if (blockNewRoute.value && hyperspaceEnabled.value) {
+    return;
+  }
   if (hyperspaceEnabled.value) {
+    blockNewRoute.value = true;
+    setTimeout(() => {
+      blockNewRoute.value = false;
+    }, 2000);
     hyperspaceStore.triggerHyperspaceChan = true;
     triggerFadeAway.value = !triggerFadeAway.value;
     setTimeout(() => {
-      router.push(route).catch((err) => {
+      router.push(rroute).catch((err) => {
         console.error("Navigation error:", err);
       });
     }, 2100);
   } else {
-    router.push(route).catch((err) => {
+    router.push(rroute).catch((err) => {
       console.error("Navigation error:", err);
     });
   }
