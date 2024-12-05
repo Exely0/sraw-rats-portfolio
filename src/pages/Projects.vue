@@ -1,23 +1,35 @@
 <template>
   <MainLayout>
     <div class="flex h-screen w-full items-center justify-center">
-      <div class="mb-12 flex h-3/5 w-3/5 gap-5" ref="gridRef">
+      <div
+        :class="`mb-12 flex h-3/5 w-3/5 ${isExpanded() ? 'gap-0' : 'gap-5'}`"
+        ref="gridRef"
+      >
         <div
           v-for="(column, colIndex) in columns"
           :key="colIndex"
           :ref="(el) => (colRefs['col' + colIndex] = el)"
-          class="flex h-full grow flex-col gap-5 transition-all"
+          :class="`flex h-full flex-col transition-all duration-500 ${!isExpanded() ? 'grow gap-5' : activeCol == colIndex ? 'grow gap-0' : 'w-0 grow-0 gap-0'}`"
         >
           <div
-            v-for="(project, projIndex) in column"
-            :key="`col${colIndex}-proj${projIndex}`"
-            :ref="(el) => (projectRefs[`${colIndex}-${projIndex}`] = el)"
-            :class="`masonry-item relative shrink border border-red-500`"
-            :style="{ flexGrow: sizes[project.size] }"
-            @click="handleClick(colIndex, projIndex)"
+            v-for="project in column"
+            :key="project.index"
+            :ref="(el) => (projectRefs[`project${project.index}`] = el)"
+            :class="`masonry-item relative shrink border transition-all duration-500 ${isExpanded() && activeProj != project.index ? 'h-0' : ''}`"
+            :style="{
+              flexGrow: !isExpanded()
+                ? sizes[project.size]
+                : activeProj == project.index
+                  ? '1'
+                  : '0',
+            }"
+            @click="handleClick(colIndex, project.index)"
           >
-            <div v-if="isExpanded == projIndex" class="absolute right-4 top-4">
-              <Icon name="close_fullscreen" />
+            <div
+              v-if="activeProj == project.index"
+              class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center border-4 border-red-500"
+            >
+              <Icon name="close_fullscreen" @click.stop="closeExpansion" />
             </div>
             <ProjectElement
               :link="project.link"
@@ -44,75 +56,99 @@ const sizes = {
   3: "4",
 };
 
+const activeCol = ref(null);
+const activeProj = ref(null);
+
+const closeExpansion = () => {
+  activeProj.value = null;
+  activeCol.value = null;
+};
+
+const isExpanded = () => {
+  return activeCol.value != null && activeProj.value != null;
+};
+
 const projects = [
   {
     link: "#",
+    index: 0,
     title: "Project 1",
     description: "Description of project 1.",
     size: 1,
   },
   {
     link: "#",
+    index: 1,
     title: "Project 2",
     description: "Description of project 2.",
     size: 2,
   },
   {
     link: "#",
+    index: 2,
     title: "Project 3",
     description: "Description of project 3.",
     size: 1,
   },
   {
     link: "#",
+    index: 3,
     title: "Project 4",
     description: "Description of project 4.",
     size: 3,
   },
   {
     link: "#",
+    index: 4,
     title: "Project 5",
     description: "Description of project 5.",
     size: 2,
   },
   {
     link: "#",
+    index: 5,
     title: "Project 6",
     description: "Description of project 6.",
     size: 2,
   },
   {
     link: "#",
+    index: 6,
     title: "Project 7",
     description: "Description of project 7.",
     size: 1,
   },
   {
     link: "#",
+    index: 7,
     title: "Project 8",
     description: "Description of project 8.",
     size: 1,
   },
   {
     link: "#",
+    index: 8,
     title: "Project 9",
     description: "Description of project 9.",
     size: 2,
   },
   {
     link: "#",
+    index: 9,
     title: "Project 10",
     description: "Description of project 10.",
     size: 1,
   },
   {
     link: "#",
+    index: 10,
     title: "Project 11",
     description: "Description of project 11.",
     size: 3,
   },
   {
     link: "#",
+    index: 11,
     title: "Project 12",
     description: "Description of project 12.",
     size: 1,
@@ -121,17 +157,22 @@ const projects = [
 
 const columns = computed(() => {
   const colCount = 4;
-  const cols = Array.from({ length: colCount }, () => []);
+  const columns: Array<Array<(typeof projects)[number]>> = Array.from(
+    { length: colCount },
+    () => [],
+  );
+
   projects.forEach((project, index) => {
-    cols[index % colCount].push(project);
+    const columnIndex = index % colCount;
+    columns[columnIndex].push(project);
   });
-  return cols;
+
+  return columns;
 });
 
 const projectRefs = reactive({});
 const colRefs = reactive({});
 const gridRef = ref();
-const isExpanded = ref(null);
 
 onMounted(() => {
   const timeline = gsap.timeline();
@@ -150,48 +191,12 @@ onMounted(() => {
 });
 
 const handleClick = (colIndex: number, projIndex: number) => {
-  Object.values(colRefs).forEach((value) => {
-    gsap.to(value as HTMLElement, {
-      gap: 0,
-      duration: 0.3,
-      ease: "power3.out",
-    });
-  });
-  Object.entries(colRefs).forEach(([key, col]) => {
-    if (key !== `col${colIndex}` && col) {
-      gsap.to(col as HTMLElement, {
-        gap: 0,
-        flexGrow: 0,
-        width: 0,
-        duration: 0.3,
-        ease: "power3.out",
-      });
-    }
-  });
+  if (isExpanded()) {
+    return;
+  }
 
-  const columnItems = Object.entries(projectRefs).filter(([key]) =>
-    key.startsWith(`${colIndex}-`),
-  );
-
-  columnItems.forEach(([key, el]) => {
-    if (key !== `${colIndex}-${projIndex}` && el) {
-      gsap.to(el as HTMLElement, {
-        height: 0,
-        flexGrow: 0,
-        duration: 0.3,
-        ease: "power3.out",
-      });
-    }
-  });
-
-  gsap.to(gridRef.value as HTMLElement, {
-    gap: 0,
-    duration: 0.3,
-    ease: "power3.out",
-  });
-  setTimeout(() => {
-    isExpanded.value = projIndex;
-  }, 1000);
+  activeCol.value = colIndex;
+  activeProj.value = projIndex;
 };
 </script>
 
