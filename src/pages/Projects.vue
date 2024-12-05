@@ -1,265 +1,209 @@
 <template>
   <MainLayout>
-    <div class="z-50 h-screen w-full">wip</div>
-    <div
-      class="projects-page relative h-screen w-full overflow-hidden"
-      ref="container"
-    >
-      <ProjectBall
-        :id="projects[0].id"
-        ref="ball0"
-        :name="projects[0].name"
-        :color="projects[0].color"
-        :size="projects[0].size"
-        :initialPosition="projects[0].initialPosition"
-        :initialVelocity="projects[0].initialVelocity"
-        :containerBounds="containerBounds"
-      />
-      <ProjectBall
-        :id="projects[1].id"
-        ref="ball1"
-        :name="projects[1].name"
-        :color="projects[1].color"
-        :size="projects[1].size"
-        :initialPosition="projects[1].initialPosition"
-        :initialVelocity="projects[1].initialVelocity"
-        :containerBounds="containerBounds"
-      />
-      <ProjectBall
-        :id="projects[2].id"
-        ref="ball2"
-        :name="projects[2].name"
-        :color="projects[2].color"
-        :size="projects[2].size"
-        :initialPosition="projects[2].initialPosition"
-        :initialVelocity="projects[2].initialVelocity"
-        :containerBounds="containerBounds"
-      />
-      <ProjectBall
-        :id="projects[3].id"
-        ref="ball3"
-        :name="projects[3].name"
-        :color="projects[3].color"
-        :size="projects[3].size"
-        :initialPosition="projects[3].initialPosition"
-        :initialVelocity="projects[3].initialVelocity"
-        :containerBounds="containerBounds"
-      />
-      <ProjectBall
-        :id="projects[4].id"
-        ref="ball4"
-        :name="projects[4].name"
-        :color="projects[4].color"
-        :size="projects[4].size"
-        :initialPosition="projects[4].initialPosition"
-        :initialVelocity="projects[4].initialVelocity"
-        :containerBounds="containerBounds"
-      />
-      <ProjectBall
-        :id="projects[5].id"
-        ref="ball5"
-        :name="projects[5].name"
-        :color="projects[5].color"
-        :size="projects[5].size"
-        :initialPosition="projects[5].initialPosition"
-        :initialVelocity="projects[5].initialVelocity"
-        :containerBounds="containerBounds"
-      />
+    <div class="flex h-screen w-full items-center justify-center">
+      <div class="mb-12 flex h-3/5 w-3/5 gap-5" ref="gridRef">
+        <div
+          v-for="(column, colIndex) in columns"
+          :key="colIndex"
+          :ref="(el) => (colRefs['col' + colIndex] = el)"
+          class="flex h-full grow flex-col gap-5 transition-all"
+        >
+          <div
+            v-for="(project, projIndex) in column"
+            :key="`col${colIndex}-proj${projIndex}`"
+            :ref="(el) => (projectRefs[`${colIndex}-${projIndex}`] = el)"
+            :class="`masonry-item relative shrink border border-red-500`"
+            :style="{ flexGrow: sizes[project.size] }"
+            @click="handleClick(colIndex, projIndex)"
+          >
+            <div v-if="isExpanded == projIndex" class="absolute right-4 top-4">
+              <Icon name="close_fullscreen" />
+            </div>
+            <ProjectElement
+              :link="project.link"
+              :title="project.title"
+              :description="project.description"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </MainLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
-import ProjectBall from "../components/ProjectBall.vue";
+import { onMounted, computed, reactive, ref } from "vue";
+import Icon from "../components/Icon.vue";
+import { gsap } from "gsap";
 import MainLayout from "../layouts/MainLayout.vue";
+import ProjectElement from "../components/ProjectElement.vue";
 
-interface Position {
-  x: number;
-  y: number;
-}
+const sizes = {
+  1: "2",
+  2: "3",
+  3: "4",
+};
 
-interface Project {
-  id: string;
-  name: string;
-  color: string;
-  size: number;
-  initialPosition: Position;
-  initialVelocity: Position;
-}
-
-const projects = <Project[]>[
+const projects = [
   {
-    id: "ball0",
-    name: "Project 1",
-    color: "red",
-    size: 150,
-    initialPosition: { x: 100, y: 100 },
-    initialVelocity: { x: 2, y: 2 },
+    link: "#",
+    title: "Project 1",
+    description: "Description of project 1.",
+    size: 1,
   },
   {
-    id: "ball1",
-    name: "Project 2",
-    color: "blue",
-    size: 250,
-    initialPosition: { x: 300, y: 200 },
-    initialVelocity: { x: -1.5, y: 1.5 },
+    link: "#",
+    title: "Project 2",
+    description: "Description of project 2.",
+    size: 2,
   },
   {
-    id: "ball2",
-    name: "Project 3",
-    color: "green",
-    size: 350,
-    initialPosition: { x: 500, y: 400 },
-    initialVelocity: { x: 1, y: -1 },
+    link: "#",
+    title: "Project 3",
+    description: "Description of project 3.",
+    size: 1,
   },
   {
-    id: "ball3",
-    name: "Project 4",
-    color: "yellow",
-    size: 250,
-    initialPosition: { x: 900, y: 200 },
-    initialVelocity: { x: 1.5, y: -1.5 },
+    link: "#",
+    title: "Project 4",
+    description: "Description of project 4.",
+    size: 3,
   },
   {
-    id: "ball4",
-    name: "Project 5",
-    color: "orange",
-    size: 350,
-    initialPosition: { x: 1000, y: 500 },
-    initialVelocity: { x: 1, y: 1 },
+    link: "#",
+    title: "Project 5",
+    description: "Description of project 5.",
+    size: 2,
   },
   {
-    id: "ball5",
-    name: "Project 6",
-    color: "violet",
-    size: 150,
-    initialPosition: { x: 1300, y: 800 },
-    initialVelocity: { x: 2, y: -2 },
+    link: "#",
+    title: "Project 6",
+    description: "Description of project 6.",
+    size: 2,
+  },
+  {
+    link: "#",
+    title: "Project 7",
+    description: "Description of project 7.",
+    size: 1,
+  },
+  {
+    link: "#",
+    title: "Project 8",
+    description: "Description of project 8.",
+    size: 1,
+  },
+  {
+    link: "#",
+    title: "Project 9",
+    description: "Description of project 9.",
+    size: 2,
+  },
+  {
+    link: "#",
+    title: "Project 10",
+    description: "Description of project 10.",
+    size: 1,
+  },
+  {
+    link: "#",
+    title: "Project 11",
+    description: "Description of project 11.",
+    size: 3,
+  },
+  {
+    link: "#",
+    title: "Project 12",
+    description: "Description of project 12.",
+    size: 1,
   },
 ];
 
-const containerBounds = reactive<{ width: number; height: number }>({
-  width: 0,
-  height: 0,
+const columns = computed(() => {
+  const colCount = 4;
+  const cols = Array.from({ length: colCount }, () => []);
+  projects.forEach((project, index) => {
+    cols[index % colCount].push(project);
+  });
+  return cols;
 });
 
-const container = ref<HTMLDivElement | null>(null);
-const ball0 = ref(null);
-const ball1 = ref(null);
-const ball2 = ref(null);
-const ball3 = ref(null);
-const ball4 = ref(null);
-const ball5 = ref(null);
+const projectRefs = reactive({});
+const colRefs = reactive({});
+const gridRef = ref();
+const isExpanded = ref(null);
 
-const updateContainerBounds = () => {
-  if (container.value) {
-    const bounds = container.value.getBoundingClientRect();
-    containerBounds.width = bounds.width;
-    containerBounds.height = bounds.height;
-  }
-};
-
-const checkCircleCollision = (ballA: any, ballB: any) => {
-  const rectA = ballA.getBoundingClientRect();
-  const centerA = {
-    x: rectA.left + rectA.width / 2,
-    y: rectA.top + rectA.height / 2,
-  };
-  const radiusA = rectA.width / 2;
-
-  const rectB = ballB.getBoundingClientRect();
-  const centerB = {
-    x: rectB.left + rectB.width / 2,
-    y: rectB.top + rectB.height / 2,
-  };
-  const radiusB = rectB.width / 2;
-
-  const dx = centerB.x - centerA.x;
-  const dy = centerB.y - centerA.y;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-
-  return distance <= radiusA + radiusB;
-};
-
-const handleBallCollision = (ballA: any, ballB: any) => {
-  const velocityA = ballA.getVelocity();
-  const velocityB = ballB.getVelocity();
-
-  const rectA = ballA.getBoundingClientRect();
-  const rectB = ballB.getBoundingClientRect();
-
-  const centerA = {
-    x: rectA.left + rectA.width / 2,
-    y: rectA.top + rectA.height / 2,
-  };
-  const centerB = {
-    x: rectB.left + rectB.width / 2,
-    y: rectB.top + rectB.height / 2,
-  };
-
-  const dx = centerB.x - centerA.x;
-  const dy = centerB.y - centerA.y;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-
-  if (distance === 0) return;
-
-  const nx = dx / distance;
-  const ny = dy / distance;
-
-  const dotProductA = velocityA.x * nx + velocityA.y * ny;
-  const dotProductB = velocityB.x * nx + velocityB.y * ny;
-
-  const newVelocityA = {
-    x: velocityA.x - 2 * dotProductA * nx,
-    y: velocityA.y - 2 * dotProductA * ny,
-  };
-  const newVelocityB = {
-    x: velocityB.x - 2 * dotProductB * nx,
-    y: velocityB.y - 2 * dotProductB * ny,
-  };
-
-  ballA.setVelocity(newVelocityA);
-  ballB.setVelocity(newVelocityB);
-};
-
-const checkCollisions = () => {
-  const balls = [
-    ball0.value,
-    ball1.value,
-    ball2.value,
-    ball3.value,
-    ball4.value,
-    ball5.value,
-  ];
-
-  for (let i = 0; i < balls.length; i++) {
-    const ballA = balls[i];
-    if (!ballA) continue;
-
-    for (let j = i + 1; j < balls.length; j++) {
-      const ballB = balls[j];
-      if (!ballB) continue;
-
-      if (checkCircleCollision(ballA, ballB)) {
-        console.log(`Collision detected between ball ${i} and ball ${j}`);
-        handleBallCollision(ballA, ballB);
-      }
-    }
-  }
-};
-
-const collisionsInterval = ref(null);
 onMounted(() => {
-  updateContainerBounds();
-  window.addEventListener("resize", updateContainerBounds);
-  collisionsInterval.value = setInterval(checkCollisions, 16);
+  const timeline = gsap.timeline();
+  const allRefs = Object.values(projectRefs) as HTMLElement[];
+
+  allRefs.forEach((el, index) => {
+    if (el) {
+      timeline.fromTo(
+        el,
+        { y: 3000 },
+        { y: 0, duration: 0.3, ease: "power3.out" },
+        index * 0.14,
+      );
+    }
+  });
 });
 
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", updateContainerBounds);
-  clearInterval(collisionsInterval.value);
-});
+const handleClick = (colIndex: number, projIndex: number) => {
+  Object.values(colRefs).forEach((value) => {
+    gsap.to(value as HTMLElement, {
+      gap: 0,
+      duration: 0.3,
+      ease: "power3.out",
+    });
+  });
+  Object.entries(colRefs).forEach(([key, col]) => {
+    if (key !== `col${colIndex}` && col) {
+      gsap.to(col as HTMLElement, {
+        gap: 0,
+        flexGrow: 0,
+        width: 0,
+        duration: 0.3,
+        ease: "power3.out",
+      });
+    }
+  });
+
+  const columnItems = Object.entries(projectRefs).filter(([key]) =>
+    key.startsWith(`${colIndex}-`),
+  );
+
+  columnItems.forEach(([key, el]) => {
+    if (key !== `${colIndex}-${projIndex}` && el) {
+      gsap.to(el as HTMLElement, {
+        height: 0,
+        flexGrow: 0,
+        duration: 0.3,
+        ease: "power3.out",
+      });
+    }
+  });
+
+  gsap.to(gridRef.value as HTMLElement, {
+    gap: 0,
+    duration: 0.3,
+    ease: "power3.out",
+  });
+  setTimeout(() => {
+    isExpanded.value = projIndex;
+  }, 1000);
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.masonry-item {
+  overflow: hidden;
+  transform: translateY(0);
+}
+
+.flex {
+  transition:
+    flex-grow 0.3s ease,
+    width 0.3s ease;
+}
+</style>
