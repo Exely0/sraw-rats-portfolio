@@ -9,7 +9,7 @@
           v-for="(column, colIndex) in columns"
           :key="colIndex"
           :ref="(el) => (colRefs['col' + colIndex] = el)"
-          :class="`flex h-full flex-col transition-all duration-500 ${!isExpanded() ? 'grow gap-5' : activeCol == colIndex ? 'grow gap-0' : 'w-0 grow-0 gap-0'}`"
+          :class="`flex h-full flex-col transition-all duration-500 ${!isExpanded() ? 'w-1/4 gap-5' : activeCol == colIndex ? 'grow gap-0' : 'w-0 grow-0 gap-0'}`"
         >
           <div
             v-for="project in column"
@@ -72,22 +72,23 @@ const projects = [
   {
     link: "#",
     index: 0,
-    title: "Project 1",
-    description: "Description of project 1.",
+    title: "Infact",
+    description: "Une application permettant depostuler à des offres en ligne.",
     size: 1,
   },
   {
     link: "#",
     index: 1,
-    title: "Project 2",
-    description: "Description of project 2.",
+    title: "Dash geometry",
+    description: "Un jeu de plateforme 2d inspiré du célèbre Geometry Dash.",
     size: 2,
   },
   {
     link: "#",
     index: 2,
-    title: "Project 3",
-    description: "Description of project 3.",
+    title: "Advice generator",
+    description:
+      "Uen application web qui donne des conseils alétoires grâce à une api.",
     size: 1,
   },
   {
