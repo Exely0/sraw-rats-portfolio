@@ -1,19 +1,19 @@
 <template>
   <div
-    class="h-full border border-green-500 transition-all group-hover:-translate-x-3"
+    :class="`proj-el h-full transition-all group-hover:-translate-x-3 ${props.color} overflow-hidden rounded-md`"
   >
     <a
       :href="link"
-      class="block h-full rounded-md bg-white p-4 shadow-md hover:shadow-lg"
+      class="flex h-full flex-col items-center justify-center rounded-md p-6 shadow-md hover:shadow-lg"
     >
       <h3 class="mb-2 text-lg font-semibold">{{ title }}</h3>
-      <p class="text-sm text-gray-600">{{ description }}</p>
+      <p class="text-sm text-gray-700">{{ description }}</p>
     </a>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   link: {
     type: String,
     required: true,
@@ -26,9 +26,11 @@ defineProps({
     type: String,
     required: true,
   },
+  color: {
+    type: String,
+    required: true,
+  },
 });
-
-const handleClick = (ele) => {};
 </script>
 
 <style scoped></style>

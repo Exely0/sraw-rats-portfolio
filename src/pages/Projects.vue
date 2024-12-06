@@ -15,7 +15,7 @@
             v-for="project in column"
             :key="project.index"
             :ref="(el) => (projectRefs[`project${project.index}`] = el)"
-            :class="`masonry-item relative shrink border transition-all duration-500 ${isExpanded() && activeProj != project.index ? 'h-0' : ''}`"
+            :class="`masonry-item relative shrink transition-all duration-300 ${isExpanded() ? '' : '[&>div]:hover:scale-95'} ${isExpanded() && activeProj != project.index ? 'h-0' : ''}`"
             :style="{
               flexGrow: !isExpanded()
                 ? sizes[project.size]
@@ -27,7 +27,7 @@
           >
             <div
               v-if="activeProj == project.index"
-              class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center border-4 border-red-500"
+              class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center border-4"
             >
               <Icon name="close_fullscreen" @click.stop="closeExpansion" />
             </div>
@@ -35,6 +35,7 @@
               :link="project.link"
               :title="project.title"
               :description="project.description"
+              :color="project.color"
             />
           </div>
         </div>
@@ -75,6 +76,7 @@ const projects = [
     title: "Infact",
     description: "Une application permettant depostuler à des offres en ligne.",
     size: 1,
+    color: "bg-green-300",
   },
   {
     link: "#",
@@ -82,6 +84,7 @@ const projects = [
     title: "Dash geometry",
     description: "Un jeu de plateforme 2d inspiré du célèbre Geometry Dash.",
     size: 2,
+    color: "bg-blue-300",
   },
   {
     link: "#",
@@ -90,6 +93,7 @@ const projects = [
     description:
       "Uen application web qui donne des conseils alétoires grâce à une api.",
     size: 1,
+    color: "bg-red-300",
   },
   {
     link: "#",
@@ -97,6 +101,7 @@ const projects = [
     title: "Project 4",
     description: "Description of project 4.",
     size: 3,
+    color: "bg-purple-300",
   },
   {
     link: "#",
@@ -104,6 +109,7 @@ const projects = [
     title: "Project 5",
     description: "Description of project 5.",
     size: 2,
+    color: "bg-red-300",
   },
   {
     link: "#",
@@ -111,6 +117,7 @@ const projects = [
     title: "Project 6",
     description: "Description of project 6.",
     size: 2,
+    color: "bg-green-300",
   },
   {
     link: "#",
@@ -118,6 +125,7 @@ const projects = [
     title: "Project 7",
     description: "Description of project 7.",
     size: 1,
+    color: "bg-blue-300",
   },
   {
     link: "#",
@@ -125,6 +133,7 @@ const projects = [
     title: "Project 8",
     description: "Description of project 8.",
     size: 1,
+    color: "bg-purple-300",
   },
   {
     link: "#",
@@ -132,6 +141,7 @@ const projects = [
     title: "Project 9",
     description: "Description of project 9.",
     size: 2,
+    color: "bg-green-300",
   },
   {
     link: "#",
@@ -139,6 +149,7 @@ const projects = [
     title: "Project 10",
     description: "Description of project 10.",
     size: 1,
+    color: "bg-purple-300",
   },
   {
     link: "#",
@@ -146,6 +157,7 @@ const projects = [
     title: "Project 11",
     description: "Description of project 11.",
     size: 3,
+    color: "bg-blue-300",
   },
   {
     link: "#",
@@ -153,6 +165,7 @@ const projects = [
     title: "Project 12",
     description: "Description of project 12.",
     size: 1,
+    color: "bg-red-300",
   },
 ];
 
