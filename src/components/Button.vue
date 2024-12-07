@@ -1,10 +1,10 @@
 <template>
   <div
-    class="group relative aspect-square w-[250px] hover:cursor-pointer"
+    class="group relative aspect-square w-[175px] md:w-[250px] hover:cursor-pointer"
     @click="handleClick"
   >
     <div
-      class="bg-black-500 group absolute z-10 flex aspect-square w-10/12 translate-x-10 translate-y-10 cursor-pointer items-center justify-center overflow-hidden border-2 border-yellow-500 bg-black text-5xl font-semibold text-white transition-all duration-150 group-hover:translate-x-0 group-hover:translate-y-0"
+      class="bg-black-500 group absolute z-10 flex aspect-square w-10/12 translate-x-5 translate-y-5 md:translate-x-10 md:translate-y-10 cursor-pointer items-center justify-center overflow-hidden border-2 border-yellow-500 bg-black text-5xl font-semibold text-white transition-all duration-150 group-hover:translate-x-0 group-hover:translate-y-0"
       ref="textContainer"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
@@ -21,7 +21,7 @@
       ></div>
     </div>
     <div
-      class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 group-hover:translate-x-10 group-hover:translate-y-10"
+      class="absolute z-0 aspect-square w-10/12 border-2 border-yellow-500 transition-all duration-300 md:group-hover:translate-x-10 md:group-hover:translate-y-10 group-hover:translate-x-5 group-hover:translate-y-5"
     ></div>
   </div>
 </template>

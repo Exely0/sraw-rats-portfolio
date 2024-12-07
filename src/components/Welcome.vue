@@ -3,8 +3,8 @@
     <div
       class="sticky top-0 flex h-screen w-full justify-center overflow-hidden"
     >
-      <div class="intro-container">
-        <p class="text-animation text-xl text-[6rem] font-semibold text-white">
+      <div class="intro-container w-full md:w-10/12">
+        <p class="text-animation text-[3.5rem] md:text-[6rem] tracking-wider md:leading-[8rem] font-semibold text-white">
           Moi c'est Lorris, je suis étudiant à l'école d'informatique 'Epitech'. J'ai commencé mes
            études d'informatique il y a 4 ans.<br><br> Le premier domaine qui m'a interessé est le développement web, mais
            étant curieux par nature j'ai travaillé sur bien d'autres sujets.<br><br> De projet en projet j'ai affiné mes compétences
@@ -104,7 +104,6 @@ onMounted(() => {
   height: 700%;
   transform-origin: 50% 100%;
   transform: perspective(500px) rotateX(20deg);
-  width: 90%;
   bottom: 0;
 }
 
@@ -112,10 +111,8 @@ onMounted(() => {
   position: absolute;
   text-align: justify;
   color: #fdbf13;
-  line-height: 10rem;
   height: 0px;
   font-family: "Archivo", serif;
-  letter-spacing: 0.8rem;
   bottom: 0;
 }
 </style>
