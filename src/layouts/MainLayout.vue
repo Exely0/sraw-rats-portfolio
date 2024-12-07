@@ -16,7 +16,6 @@ const hyperspaceStore = useHyperspaceStore();
 const { triggerFadeAway } = storeToRefs(hyperspaceStore);
 
 watch(triggerFadeAway, () => {
-  console.log("coucou");
   const ele: HTMLElement = document.getElementsByTagName(
     "main",
   )[0] as unknown as HTMLElement;

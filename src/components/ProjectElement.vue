@@ -1,13 +1,15 @@
 <template>
   <div
-    :class="`proj-el h-full transition-all group-hover:-translate-x-3 ${props.color} overflow-hidden rounded-md`"
+    :class="`proj-el h-full overflow-hidden rounded-md border-2 border-[#fdbf13] transition-all`"
   >
     <a
       :href="link"
-      class="flex h-full flex-col items-center justify-center rounded-md p-6 shadow-md hover:shadow-lg"
+      class="flex h-full flex-col items-center justify-center rounded-md p-6"
     >
-      <h3 class="mb-2 text-lg font-semibold">{{ title }}</h3>
-      <p class="text-sm text-gray-700">{{ description }}</p>
+      <h3 class="mb-2 text-center text-xl font-semibold text-[#fdbf13]">
+        {{ title }}
+      </h3>
+      <p class="text-md text-white">{{ description }}</p>
     </a>
   </div>
 </template>
@@ -23,10 +25,6 @@ const props = defineProps({
     required: true,
   },
   description: {
-    type: String,
-    required: true,
-  },
-  color: {
     type: String,
     required: true,
   },

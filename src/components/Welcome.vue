@@ -44,7 +44,6 @@ const doubleArrow = ref("keyboard_double_arrow_down");
 gsap.registerPlugin(ScrollTrigger);
 
 const triggerFadeAway = () => {
-  console.log("coucou");
   const ele: HTMLElement = document.getElementsByClassName(
     "scroll-trigger-intro",
   )[0] as unknown as HTMLElement;

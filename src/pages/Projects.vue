@@ -1,6 +1,8 @@
 <template>
   <MainLayout>
-    <div class="flex h-screen w-full items-center justify-center">
+    <div
+      class="flex h-screen w-full items-center justify-center overflow-y-hidden"
+    >
       <div
         :class="`mb-12 flex h-3/5 w-3/5 ${isExpanded() ? 'gap-0' : 'gap-5'}`"
         ref="gridRef"
@@ -9,13 +11,13 @@
           v-for="(column, colIndex) in columns"
           :key="colIndex"
           :ref="(el) => (colRefs['col' + colIndex] = el)"
-          :class="`flex h-full flex-col transition-all duration-500 ${!isExpanded() ? 'w-1/4 gap-5' : activeCol == colIndex ? 'grow gap-0' : 'w-0 grow-0 gap-0'}`"
+          :class="`flex h-full flex-col transition-all duration-500 ease-out ${!isExpanded() ? 'w-1/4 gap-5' : activeCol == colIndex ? 'w-full gap-0' : 'w-0 gap-0'}`"
         >
           <div
             v-for="project in column"
             :key="project.index"
             :ref="(el) => (projectRefs[`project${project.index}`] = el)"
-            :class="`masonry-item relative shrink transition-all duration-300 ${isExpanded() ? '' : '[&>div]:hover:scale-95'} ${isExpanded() && activeProj != project.index ? 'h-0' : ''}`"
+            :class="`masonry-item relative shrink transition-all duration-500 ease-out ${isExpanded() ? '' : '[&>div]:hover:scale-95'} ${isExpanded() && activeProj != project.index ? 'h-0' : ''}`"
             :style="{
               flexGrow: !isExpanded()
                 ? sizes[project.size]
@@ -27,15 +29,15 @@
           >
             <div
               v-if="activeProj == project.index"
-              class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center border-4"
+              @click.stop="closeExpansion"
+              class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-md border-2"
             >
-              <Icon name="close_fullscreen" @click.stop="closeExpansion" />
+              <Icon name="close_fullscreen" color="white" />
             </div>
             <ProjectElement
               :link="project.link"
               :title="project.title"
               :description="project.description"
-              :color="project.color"
             />
           </div>
         </div>
@@ -61,6 +63,7 @@ const activeCol = ref(null);
 const activeProj = ref(null);
 
 const closeExpansion = () => {
+  console.log("coucou");
   activeProj.value = null;
   activeCol.value = null;
 };
@@ -74,9 +77,9 @@ const projects = [
     link: "#",
     index: 0,
     title: "Infact",
-    description: "Une application permettant depostuler à des offres en ligne.",
+    description:
+      "Une application permettant de postuler à des offres d'emploi en ligne.",
     size: 1,
-    color: "bg-green-300",
   },
   {
     link: "#",
@@ -84,32 +87,28 @@ const projects = [
     title: "Dash geometry",
     description: "Un jeu de plateforme 2d inspiré du célèbre Geometry Dash.",
     size: 2,
-    color: "bg-blue-300",
   },
   {
     link: "#",
     index: 2,
     title: "Advice generator",
     description:
-      "Uen application web qui donne des conseils alétoires grâce à une api.",
+      "Une application web qui donne des conseils alétoires grâce à une api.",
     size: 1,
-    color: "bg-red-300",
   },
   {
     link: "#",
     index: 3,
-    title: "Project 4",
-    description: "Description of project 4.",
+    title: "Portfolio v1",
+    description: "Premier portfolio que j'ai réalisé.",
     size: 3,
-    color: "bg-purple-300",
   },
   {
     link: "#",
     index: 4,
-    title: "Project 5",
-    description: "Description of project 5.",
+    title: "Interactive card details form",
+    description: "Intégration d'une maquette interactive.",
     size: 2,
-    color: "bg-red-300",
   },
   {
     link: "#",
@@ -117,15 +116,13 @@ const projects = [
     title: "Project 6",
     description: "Description of project 6.",
     size: 2,
-    color: "bg-green-300",
   },
   {
     link: "#",
     index: 6,
-    title: "Project 7",
-    description: "Description of project 7.",
+    title: "Digital resume",
+    description: "Un CV digital.",
     size: 1,
-    color: "bg-blue-300",
   },
   {
     link: "#",
@@ -133,31 +130,28 @@ const projects = [
     title: "Project 8",
     description: "Description of project 8.",
     size: 1,
-    color: "bg-purple-300",
   },
   {
     link: "#",
     index: 8,
-    title: "Project 9",
-    description: "Description of project 9.",
+    title: "Multi-step form",
+    description: "Intégration d'une maquette.",
     size: 2,
-    color: "bg-green-300",
   },
   {
     link: "#",
     index: 9,
-    title: "Project 10",
-    description: "Description of project 10.",
+    title: "News homepage",
+    description: "Intégration d'une maquette.",
     size: 1,
-    color: "bg-purple-300",
   },
   {
     link: "#",
     index: 10,
-    title: "Project 11",
-    description: "Description of project 11.",
+    title: "Todo list",
+    description:
+      "Une application permettant de noter et gérer les tâches du quotidien.",
     size: 3,
-    color: "bg-blue-300",
   },
   {
     link: "#",
@@ -165,7 +159,6 @@ const projects = [
     title: "Project 12",
     description: "Description of project 12.",
     size: 1,
-    color: "bg-red-300",
   },
 ];
 
@@ -218,11 +211,5 @@ const handleClick = (colIndex: number, projIndex: number) => {
 .masonry-item {
   overflow: hidden;
   transform: translateY(0);
-}
-
-.flex {
-  transition:
-    flex-grow 0.3s ease,
-    width 0.3s ease;
 }
 </style>
