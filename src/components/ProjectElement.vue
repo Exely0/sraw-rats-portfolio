@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`proj-el h-full overflow-hidden rounded-md border-2 border-[#fdbf13] transition-all`"
+    :class="`proj-el h-full overflow-hidden rounded-md border-2 border-[#fdbf13] transition-all p-6`"
   >
     <a
       :href="link"

@@ -1,75 +1,87 @@
 <template>
   <MainLayout>
-    <div
-      class="flex h-screen w-full items-center justify-center overflow-y-hidden"
-    >
+    <div class="py-36 md:p-0 flex h-screen w-full px-8 items-center justify-center md:overflow-y-hidden">
+      <!-- Desktop View -->
       <div
-        :class="`mb-12 flex h-3/5 w-3/5 ${isExpanded() ? 'gap-0' : 'gap-5'}`"
+        class="hidden md:flex mb-12 w-full md:w-4/5 lg:w-3/5 h-4/6 gap-3 md:gap-5 flex-wrap justify-center"
         ref="gridRef"
       >
         <div
-          v-for="(column, colIndex) in columns"
-          :key="colIndex"
-          :ref="(el) => (colRefs['col' + colIndex] = el)"
-          :class="`flex h-full flex-col transition-all duration-500 ease-out ${!isExpanded() ? 'w-1/4 gap-5' : activeCol == colIndex ? 'w-full gap-0' : 'w-0 gap-0'}`"
+          v-for="project in projects"
+          :key="project.index"
+          :ref="(el) => (projectRefs[`project${project.index}`] = el)"
+          :class="`masonry-item relative  transition-all duration-150
+          ${
+            isExpanded() ? (activeProj != project.index ? ' w-0 h-0 opacity-0' : ' h-full w-full') : 'md:w-[30%] lg:w-[21%] h-auto [&>div]:hover:scale-95 opacity-1'
+          }
+          `"
+
+          @click="handleClick(project.index)"
         >
           <div
-            v-for="project in column"
-            :key="project.index"
-            :ref="(el) => (projectRefs[`project${project.index}`] = el)"
-            :class="`masonry-item relative shrink transition-all duration-500 ease-out ${isExpanded() ? '' : '[&>div]:hover:scale-95'} ${isExpanded() && activeProj != project.index ? 'h-0' : ''}`"
-            :style="{
-              flexGrow: !isExpanded()
-                ? sizes[project.size]
-                : activeProj == project.index
-                  ? '1'
-                  : '0',
-            }"
-            @click="handleClick(colIndex, project.index)"
+            v-if="activeProj == project.index"
+            @click.stop="closeExpansion"
+            class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-md border-2"
           >
-            <div
-              v-if="activeProj == project.index"
-              @click.stop="closeExpansion"
-              class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-md border-2"
-            >
-              <Icon name="close_fullscreen" color="white" />
-            </div>
-            <ProjectElement
-              :link="project.link"
-              :title="project.title"
-              :description="project.description"
-            />
+            <Icon name="close_fullscreen" color="white" />
           </div>
+          <ProjectElement
+            :link="project.link"
+            :title="project.title"
+            :description="project.description"
+          />
+        </div>
+      </div>
+
+      <!-- Mobile View -->
+    <div class="md:hidden flex flex-col gap-4 h-4/5 overflow-y-scroll">
+        <div
+          v-for="project in projects"
+          :key="project.index"
+          :class="`w-full  shrink-0 masonry-item relative transition-all duration-500 ease-out ${
+            !isExpanded() ? 'h-[20%]' : ''
+          } ${
+            isExpanded() && activeProj == project.index ? 'h-full' : ''
+          }${
+            isExpanded() && activeProj != project.index ? 'h-0' : ''
+          }
+          `"
+          @click="handleClick(project.index)"
+        >
+          <div
+            v-if="activeProj == project.index"
+            @click.stop="closeExpansion"
+            class="absolute right-4 top-4 z-20 flex aspect-square w-12 cursor-pointer items-center justify-center rounded-md border-2"
+          >
+            <Icon name="close_fullscreen" color="white" />
+          </div>
+          <ProjectElement
+            :link="project.link"
+            :title="project.title"
+            :description="project.description"
+          />
         </div>
       </div>
     </div>
   </MainLayout>
 </template>
 
+
 <script setup lang="ts">
-import { onMounted, computed, reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import Icon from "../components/Icon.vue";
 import { gsap } from "gsap";
 import MainLayout from "../layouts/MainLayout.vue";
 import ProjectElement from "../components/ProjectElement.vue";
 
-const sizes = {
-  1: "2",
-  2: "3",
-  3: "4",
-};
-
-const activeCol = ref(null);
-const activeProj = ref(null);
+const activeProj = ref<number | null>(null);
 
 const closeExpansion = () => {
-  console.log("coucou");
   activeProj.value = null;
-  activeCol.value = null;
 };
 
 const isExpanded = () => {
-  return activeCol.value != null && activeProj.value != null;
+  return activeProj.value !== null;
 };
 
 const projects = [
@@ -79,14 +91,12 @@ const projects = [
     title: "Infact",
     description:
       "Une application permettant de postuler à des offres d'emploi en ligne.",
-    size: 1,
   },
   {
     link: "#",
     index: 1,
     title: "Dash geometry",
     description: "Un jeu de plateforme 2d inspiré du célèbre Geometry Dash.",
-    size: 2,
   },
   {
     link: "#",
@@ -94,56 +104,48 @@ const projects = [
     title: "Advice generator",
     description:
       "Une application web qui donne des conseils alétoires grâce à une api.",
-    size: 1,
   },
   {
     link: "#",
     index: 3,
     title: "Portfolio v1",
     description: "Premier portfolio que j'ai réalisé.",
-    size: 3,
   },
   {
     link: "#",
     index: 4,
     title: "Interactive card details form",
     description: "Intégration d'une maquette interactive.",
-    size: 2,
   },
   {
     link: "#",
     index: 5,
-    title: "Project 6",
-    description: "Description of project 6.",
-    size: 2,
+    title: "Pricing component",
+    description: "Intégration d'une maquette.",
   },
   {
     link: "#",
     index: 6,
     title: "Digital resume",
     description: "Un CV digital.",
-    size: 1,
   },
   {
     link: "#",
     index: 7,
-    title: "Project 8",
-    description: "Description of project 8.",
-    size: 1,
+    title: "URL shortener",
+    description: "Une application qui permet de raccourcir d'importe quel lien.",
   },
   {
     link: "#",
     index: 8,
     title: "Multi-step form",
     description: "Intégration d'une maquette.",
-    size: 2,
   },
   {
     link: "#",
     index: 9,
     title: "News homepage",
     description: "Intégration d'une maquette.",
-    size: 1,
   },
   {
     link: "#",
@@ -151,34 +153,16 @@ const projects = [
     title: "Todo list",
     description:
       "Une application permettant de noter et gérer les tâches du quotidien.",
-    size: 3,
   },
   {
     link: "#",
     index: 11,
-    title: "Project 12",
-    description: "Description of project 12.",
-    size: 1,
+    title: "Expense chart",
+    description: "Intégration d'une maquette.",
   },
 ];
 
-const columns = computed(() => {
-  const colCount = 4;
-  const columns: Array<Array<(typeof projects)[number]>> = Array.from(
-    { length: colCount },
-    () => [],
-  );
-
-  projects.forEach((project, index) => {
-    const columnIndex = index % colCount;
-    columns[columnIndex].push(project);
-  });
-
-  return columns;
-});
-
 const projectRefs = reactive({});
-const colRefs = reactive({});
 const gridRef = ref();
 
 onMounted(() => {
@@ -197,19 +181,23 @@ onMounted(() => {
   });
 });
 
-const handleClick = (colIndex: number, projIndex: number) => {
-  if (isExpanded()) {
-    return;
-  }
-
-  activeCol.value = colIndex;
+const handleClick = (projIndex: number) => {
+  if (isExpanded()) return;
   activeProj.value = projIndex;
 };
 </script>
 
-<style scoped>
+<style lang="css">
 .masonry-item {
   overflow: hidden;
   transform: translateY(0);
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-1 {
+  opacity: 1;
 }
 </style>

@@ -15,7 +15,7 @@
         <div
           class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all"
         >
-          <div class="btn-1 translate-y-[1000px] text-6xl text-[#fdbf13]">
+          <div class="btn-1 translate-y-[1000px] text-4xl md:text-6xl text-[#fdbf13] text-center">
             <div>
               Explorez l'univers en utilisant les commandes du tableau de bord
             </div>
@@ -23,7 +23,7 @@
               <Icon
                 name="keyboard_double_arrow_down"
                 color="#fdbf13"
-                font-size="120px"
+                font-size="100px"
               />
             </div>
           </div>

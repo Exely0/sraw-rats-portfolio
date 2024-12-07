@@ -39,9 +39,9 @@
       </div>
     </div>
     <div
-      class="fixed bottom-0 left-1/2 z-50 flex h-32 origin-left -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
+      class="fixed bottom-0 bg-black left-1/2 z-50 flex h-32 -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
     >
-      <div class="diago-lr relative border-b-4 border-r-4 border-[#fdbf13]">
+      <div class="hidden md:block diago-lr relative border-b-4 border-r-4 border-[#fdbf13]">
         <div
           class="triangle absolute bottom-0 right-0 aspect-square h-1/4 rotate-180 bg-[#fdbf13]"
         ></div>
@@ -55,7 +55,7 @@
       <div
         v-for="(page, index) in pages"
         :key="index"
-        class="group relative flex items-center justify-center border-y-4 border-[#fdbf13] text-2xl capitalize text-[#fdbf13] hover:cursor-pointer"
+        class="group relative flex md:bg-transparent bg-black items-center justify-center border-y-4 border-[#fdbf13] text-2xl capitalize text-[#fdbf13] hover:cursor-pointer"
         @click="handleClick(page.route)"
       >
         {{ page.name }}
@@ -75,7 +75,7 @@
           class="triangle absolute bottom-0 right-0 aspect-square h-1/4 rotate-180 bg-[#fdbf13]"
         ></div>
       </div>
-      <div class="diago-rl relative border-b-4 border-l-4 border-[#fdbf13]">
+      <div class="hidden md:block diago-rl relative border-b-4 border-l-4 border-[#fdbf13]">
         <div
           class="triangle absolute bottom-0 left-0 aspect-square h-1/4 -rotate-90 bg-[#fdbf13]"
         ></div>
