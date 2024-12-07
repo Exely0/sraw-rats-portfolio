@@ -6,7 +6,7 @@
           <img class="h-full w-auto invert" :src="githubIcon" />
         </div>
       </Button>
-      <Button text="" url="https://www.linkedin.com/in/lorris-pons/"
+      <Button text="" url="www.linkedin.com/in/lorris-pons-7556ab338"
         ><div class="h-1/2">
           <img class="h-full w-auto invert" :src="linkedinLogo" /></div
       ></Button>
