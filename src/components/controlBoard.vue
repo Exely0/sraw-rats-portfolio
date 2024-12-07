@@ -2,9 +2,9 @@
   <div class="z-50">
     <div class="fixed right-4 top-4 z-50">
       <div>
-        <div class="text-white">Slow loading</div>
+        <div class="text-white">Animations</div>
         <div
-          class="relative box-content h-[35px] w-[80px] rounded-full border-2 border-[#fdbf13] bg-black hover:cursor-pointer"
+          class=" relative box-content h-[35px] w-[80px] rounded-full border-2 border-[#fdbf13] bg-black hover:cursor-pointer"
           @click="
             () => {
               if (hyperspaceEnabled == false) {
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div>
-        <div class="text-white">Moving stars</div>
+        <div class="text-white">Fond dynamique</div>
         <div
           class="relative box-content h-[35px] w-[80px] rounded-full border-2 border-[#fdbf13] bg-black hover:cursor-pointer"
           @click="
@@ -39,7 +39,7 @@
       </div>
     </div>
     <div
-      class="fixed bottom-0 bg-black left-1/2 z-50 flex h-32 -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
+      class="fixed bottom-0 left-1/2 z-50 flex h-32 -translate-x-1/2 items-center justify-center gap-3 [&>div]:aspect-square [&>div]:h-full"
     >
       <div class="hidden md:block diago-lr relative border-b-4 border-r-4 border-[#fdbf13]">
         <div
@@ -142,7 +142,7 @@ const pages: IPages = {
     route: "/",
   },
   1: {
-    name: "projects",
+    name: "projets",
     route: "/projects",
   },
   2: {

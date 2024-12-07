@@ -16,9 +16,12 @@ import CV from "../assets/pdf/cv lorris pons.pdf";
 const embedWidth = ref(0);
 const embedHeight = ref(0);
 
+const minWidth = 360;
+
 const updateEmbedDimensions = () => {
-  embedWidth.value = (2 * window.innerWidth) / 5;
+  const computedWidth = (2 * window.innerWidth) / 4;
   embedHeight.value = window.innerHeight * 0.7;
+  embedWidth.value = Math.max(computedWidth, minWidth);
 };
 
 onMounted(() => {
