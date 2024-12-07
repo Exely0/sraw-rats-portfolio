@@ -4,13 +4,14 @@
       class="sticky top-0 flex h-screen w-full justify-center overflow-hidden"
     >
       <div class="intro-container">
-        <p class="text-animation text-xl font-semibold text-white">
-          A long time ago in a galaxy far, far away... A long time ago in a
-          galaxy far, far away... A long time ago in a galaxy far, far away... A
-          long time ago in a galaxy far, far away... A long time ago in a galaxy
-          far, far away... A long time ago in a galaxy far, far away... A long
-          time ago in a galaxy far, far away... A long time ago in a galaxy far,
-          far away...
+        <p class="text-animation text-xl text-[6rem] font-semibold text-white">
+          Moi c'est Lorris, je suis étudiant à l'école d'informatique 'Epitech'. J'ai commencé mes
+           études d'informatique il y a 4 ans.<br><br> Le premier domaine qui m'a interessé est le développement web, mais
+           étant curieux par nature j'ai travaillé sur bien d'autres sujets.<br><br> De projet en projet j'ai affiné mes compétences
+           et ai appris à travailler en équipe.<br><br>
+           Aujourd'hui je recherche une alternance pour continuer mes études car je suis convaincu que c'est la meilleure 
+           manière pour moi de progresser et de m'épanouir. Après mes études j'aimerais être développeur, alors pourquoi ne 
+           pas commencer à m'y former concrètement dès maintenant ?
         </p>
         <div
           class="btn-container absolute bottom-0 flex h-screen w-full items-center justify-center gap-10 transition-all"
@@ -92,25 +93,6 @@ onMounted(() => {
     translateY: 0,
   });
 
-  gsap.to(".btn-2", {
-    scrollTrigger: {
-      trigger: ".scroll-trigger-intro",
-      start: "40% top",
-      end: "70%",
-      scrub: true,
-    },
-    translateY: 0,
-  });
-
-  gsap.to(".btn-3", {
-    scrollTrigger: {
-      trigger: ".scroll-trigger-intro",
-      start: "50% top",
-      end: "80%",
-      scrub: true,
-    },
-    translateY: 0,
-  });
 });
 </script>
 
@@ -130,8 +112,7 @@ onMounted(() => {
   position: absolute;
   text-align: justify;
   color: #fdbf13;
-  font-size: 8rem;
-  line-height: 8rem;
+  line-height: 10rem;
   height: 0px;
   font-family: "Archivo", serif;
   letter-spacing: 0.8rem;
