@@ -10,7 +10,7 @@
           v-for="project in projects"
           :key="project.index"
           :ref="(el) => (projectRefs[`project${project.index}`] = el)"
-          :class="`masonry-item relative  transition-all duration-150 cursor-pointer
+          :class="`masonry-item relative  transition-[transform] duration-150 cursor-pointer
           ${
             isExpanded() ? (activeProj != project.index ? ' w-0 h-0 opacity-0' : ' h-full w-full') : 'md:w-[30%] lg:w-[21%] h-auto [&>div]:hover:scale-95 opacity-1'
           }
