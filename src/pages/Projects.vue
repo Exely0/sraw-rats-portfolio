@@ -10,7 +10,7 @@
           v-for="project in projects"
           :key="project.index"
           :ref="(el) => (projectRefs[`project${project.index}`] = el)"
-          :class="`masonry-item relative  transition-all duration-150
+          :class="`masonry-item relative  transition-all duration-150 cursor-pointer
           ${
             isExpanded() ? (activeProj != project.index ? ' w-0 h-0 opacity-0' : ' h-full w-full') : 'md:w-[30%] lg:w-[21%] h-auto [&>div]:hover:scale-95 opacity-1'
           }
@@ -29,6 +29,7 @@
             :link="project.link"
             :title="project.title"
             :description="project.description"
+            :is-active="activeProj === project.index"
           />
         </div>
       </div>
@@ -86,78 +87,78 @@ const isExpanded = () => {
 
 const projects = [
   {
-    link: "#",
+    link: "https://github.com/Exely0/draob-boj",
     index: 0,
     title: "Infact",
     description:
       "Une application permettant de postuler à des offres d'emploi en ligne.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/dash-geometry",
     index: 1,
     title: "Dash geometry",
     description: "Un jeu de plateforme 2d inspiré du célèbre Geometry Dash.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/AdviceGeneratorApp",
     index: 2,
     title: "Advice generator",
     description:
       "Une application web qui donne des conseils alétoires grâce à une api.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/portfolio",
     index: 3,
     title: "Portfolio v1",
     description: "Premier portfolio que j'ai réalisé.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/InteractiveCardDetailsForm",
     index: 4,
     title: "Interactive card details form",
     description: "Intégration d'une maquette interactive.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/PricingComponentWithToggle",
     index: 5,
     title: "Pricing component",
     description: "Intégration d'une maquette.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/digital-resume",
     index: 6,
     title: "Digital resume",
     description: "Un CV digital.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/UrlShorteningApiWebsite",
     index: 7,
     title: "URL shortener",
     description: "Une application qui permet de raccourcir d'importe quel lien.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/multi-step-form",
     index: 8,
     title: "Multi-step form",
     description: "Intégration d'une maquette.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/NewsHomepage",
     index: 9,
     title: "News homepage",
     description: "Intégration d'une maquette.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/ToDoListApplication",
     index: 10,
     title: "Todo list",
     description:
       "Une application permettant de noter et gérer les tâches du quotidien.",
   },
   {
-    link: "#",
+    link: "https://github.com/Exely0/ExpensesChartComponent",
     index: 11,
-    title: "Expense chart",
+    title: "Expenses chart",
     description: "Intégration d'une maquette.",
   },
 ];
